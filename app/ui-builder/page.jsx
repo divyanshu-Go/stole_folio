@@ -1,26 +1,10 @@
 import Test from "@/components/Test";
-import UiBuilder from "@/components/UiBuilder";
+import UiBuilder from "@/components/UiBuilderComponents/UiBuilder";
 import Container from "@/models/Container";
 import DbConnect from "@/lib/db/DbConnect";
+import { convertToPlainObject } from "@/lib/utils/container";
 
 
-
-
-const convertToPlainObject = (doc) => {
-  if (!doc) return null;
-
-  return {
-    name: doc.name,
-    container_Id: doc.container_Id,
-    type: doc.type,
-    text: doc.text,
-    styles: doc.styles || {},
-    hoverStyles: doc.hoverStyles || {},
-    children: doc.children ? doc.children.map(child => convertToPlainObject(child)) : [null, null, null, null],
-    locked: doc.locked || false,
-    hidden: doc.hidden || false
-  };
-};
 
 export default async function UiBuilderPage() {
 
@@ -48,6 +32,27 @@ export default async function UiBuilderPage() {
 const Header = undefined;
 
 
+const buttonContainer = {
+  container_Id: "btn-001",
+  name: "PrimaryButton",
+  type: "button",
+  text: "Click Me",
+  styles: {
+    width: "150px",
+    height: "40px",
+    backgroundColor: "#007bff", // only few styles
+    color: "#ffffff",
+    margin:"50px"
+  },
+  hoverStyles: {
+    backgroundColor: "#0056b3",
+
+    // others missing, will fallback from class defaults
+  },
+  children: [null,null,null,null],
+  locked: false,
+  hidden: false
+};
 
 
 
@@ -59,7 +64,7 @@ const Header = undefined;
 
   return (
     <div className="w-full flex flex-col ">
-      <UiBuilder initialContainer={initialContainer} />
+      <UiBuilder initialContainer={buttonContainer} />
       {/* <Test/> */}
     </div>
   );

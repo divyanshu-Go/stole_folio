@@ -7,6 +7,13 @@ export default class Container {
     this.type = type;
     this.text = "Sample Text";
     this.children = [null, null, null, null];
+    
+    // NEW: Link properties
+    this.linkUrl = "";
+    this.linkTarget = "_self"; // "_self", "_blank", "_parent", "_top"
+    this.linkTitle = ""; // For accessibility/tooltip
+    this.isClickable = false; // Toggle to enable/disable link functionality
+    
     this.styles = {
       height: "200px",
       width: "200px",
@@ -50,6 +57,13 @@ export default class Container {
     cloned.children = this.children.map(child => child ? child.clone() : null);
     cloned.locked = this.locked;
     cloned.hidden = this.hidden;
+    
+    // NEW: Clone link properties
+    cloned.linkUrl = this.linkUrl;
+    cloned.linkTarget = this.linkTarget;
+    cloned.linkTitle = this.linkTitle;
+    cloned.isClickable = this.isClickable;
+    
     return cloned;
   }
 
@@ -64,6 +78,11 @@ export default class Container {
       children: this.children.map(child => child ? child.toJSON() : null),
       locked: this.locked,
       hidden: this.hidden,
+      // NEW: Include link properties in serialization
+      linkUrl: this.linkUrl,
+      linkTarget: this.linkTarget,
+      linkTitle: this.linkTitle,
+      isClickable: this.isClickable,
     };
   }
 
@@ -79,7 +98,13 @@ export default class Container {
     );
     container.locked = data.locked;
     container.hidden = data.hidden;
+    
+    // NEW: Restore link properties (with defaults for backward compatibility)
+    container.linkUrl = data.linkUrl || "";
+    container.linkTarget = data.linkTarget || "_self";
+    container.linkTitle = data.linkTitle || "";
+    container.isClickable = data.isClickable || false;
+    
     return container;
   }
 }
-

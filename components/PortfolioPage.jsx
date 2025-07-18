@@ -72,21 +72,59 @@ const PortfolioContainer = ({ container }) => {
     target.style.boxShadow = container.styles.boxShadow || "none";
   };
 
-  // Full-screen container styles (no selection outline or cursor pointer)
+  // Full-screen container styles
   const containerStyle = {
     ...container.styles,
     position: "relative",
     minHeight: container.styles.minHeight || "fit-content",
     maxWidth: "100%",
     transition: "all 0.2s ease",
+    // NEW: Add link-specific styling
+    cursor: container.isClickable && container.linkUrl ? "pointer" : "default",
+    textDecoration: container.isClickable && container.linkUrl ? "underline" : "none",
   };
 
+  // Common props for both div and anchor elements
+  const commonProps = {
+    style: containerStyle,
+    onMouseEnter: handleMouseEnter,
+    onMouseLeave: handleMouseLeave,
+  };
+
+  // NEW: Render as anchor tag if it's clickable and has a URL
+  if (container.isClickable && container.linkUrl) {
+    return (
+      <a
+        {...commonProps}
+        href={container.linkUrl}
+        target={container.linkTarget}
+        title={container.linkTitle}
+        rel={container.linkTarget === "_blank" ? "noopener noreferrer" : undefined}
+      >
+        {/* Render text if no children or if it's a leaf node */}
+        {container.text && !container.children.some((child) => child !== null) && (
+          <span style={{ fontSize: container.styles.fontSize }}>
+            {container.text}
+          </span>
+        )}
+
+        {/* Recursively render children */}
+        {container.children.map(
+          (child) =>
+            child && (
+              <PortfolioContainer
+                key={child.container_Id}
+                container={child}
+              />
+            )
+        )}
+      </a>
+    );
+  }
+
+  // Render as div for non-clickable containers
   return (
-    <div
-      style={containerStyle}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
+    <div {...commonProps}>
       {/* Render text if no children or if it's a leaf node */}
       {container.text && !container.children.some((child) => child !== null) && (
         <span style={{ fontSize: container.styles.fontSize }}>

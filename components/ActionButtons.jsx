@@ -11,11 +11,13 @@ const ActionButtons = ({
   onAddChild,
   onDeleteChild,
 }) => {
-  const canAddChild =
-    container.children.filter((child) => child !== null).length < 4;
+
+  
+const canAddChild =
+  !container.isClickable &&
+  container.children.filter((child) => child !== null).length < 4;
 
 
-  console.log(isRootSelected);
 
   return (
     <div className="pt-3 mt-3 border-t space-y-2">

@@ -1,21 +1,7 @@
 import PortfolioPage from '@/components/PortfolioPage';
 import Container from '@/components/ContainerClass';
+import { convertToPlainObject } from '@/lib/utils/container';
 
-// Convert database object to Container instance
-const convertToPlainObject = (doc) => {
-  if (!doc) return null;
-  return {
-    name: doc.name,
-    container_Id: doc.container_Id,
-    type: doc.type,
-    text: doc.text,
-    styles: doc.styles || {},
-    hoverStyles: doc.hoverStyles || {},
-    children: doc.children ? doc.children.map(child => convertToPlainObject(child)) : [null, null, null, null],
-    locked: doc.locked || false,
-    hidden: doc.hidden || false
-  };
-};
 
 // Fetch portfolio data server-side
 async function getPortfolioData(portfolioId) {

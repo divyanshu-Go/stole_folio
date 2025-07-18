@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import PreviewContainer from "@/components/PreviewContainer";
-import StyleController from "@/components/StyleController";
-import Container from "./ContainerClass";
+import PreviewContainer from "@/components/UiBuilderComponents/PreviewContainer";
+import StyleController from "@/components/UiBuilderComponents/StyleController";
+import Container from "../ContainerClass";
 import { cloneContainer, deserializeContainer, findContainer, serializeContainer } from "@/lib/utils/container";
 
 
@@ -98,6 +98,48 @@ const addLibraryComponent = (parentId, libraryContainer) => {
 };
 
 
+
+// Update container link properties
+const updateContainerLink = (container_Id, linkProperty, value) => {
+  const update = (container) => {
+    if (container.container_Id === container_Id) {
+      return {
+        ...container,
+        [linkProperty]: value,
+      };
+    }
+    return {
+      ...container,
+      children: container.children.map((child) =>
+        child ? update(child) : null
+      ),
+    };
+  };
+  setRootContainer(update(rootContainer));
+};
+
+
+// Toggle clickable functionality for a container
+const toggleContainerClickable = (container_Id, isClickable) => {
+  const update = (container) => {
+    if (container.container_Id === container_Id) {
+      return {
+        ...container,
+        isClickable: isClickable,
+        // Clear URL when disabling clickable to avoid confusion
+        linkUrl: isClickable ? container.linkUrl : "",
+        linkTitle: isClickable ? container.linkTitle : "",
+      };
+    }
+    return {
+      ...container,
+      children: container.children.map((child) =>
+        child ? update(child) : null
+      ),
+    };
+  };
+  setRootContainer(update(rootContainer));
+};
 
 
   // Recursively updates the style of the container with given ID
@@ -259,6 +301,8 @@ const addLibraryComponent = (parentId, libraryContainer) => {
                 serializeContainer={serializeContainer}
                 deserializeContainer={deserializeContainer}
                 onAddLibraryComponent={addLibraryComponent}
+                onLinkChange={updateContainerLink}
+                onToggleClickable={toggleContainerClickable}
               />
             )}
           </div>

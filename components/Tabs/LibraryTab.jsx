@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import SmallPreviewContainer from "@/components/SmallPreviewContainer";
 import Container from "@/components/ContainerClass";
+import { convertToPlainObject } from "@/lib/utils/container";
 
 const LibraryTab = ({ selectedContainerId, onAddLibraryComponent }) => {
     const [libraryComponents, setLibraryComponents] = useState([]);
@@ -10,21 +11,6 @@ const LibraryTab = ({ selectedContainerId, onAddLibraryComponent }) => {
     const [error, setError] = useState("");
     const [selectedLibraryItem, setSelectedLibraryItem] = useState(null);
 
-    // Convert plain object to Container instance
-    const convertToPlainObject = (doc) => {
-        if (!doc) return null;
-        return {
-            name: doc.name,
-            container_Id: doc.container_Id,
-            type: doc.type,
-            text: doc.text,
-            styles: doc.styles || {},
-            hoverStyles: doc.hoverStyles || {},
-            children: doc.children ? doc.children.map(child => convertToPlainObject(child)) : [null, null, null, null],
-            locked: doc.locked || false,
-            hidden: doc.hidden || false
-        };
-    };
 
     // Fetch library components from API
     useEffect(() => {

@@ -39,7 +39,7 @@ const hoverStylesSchema = new mongoose.Schema({
 // Recursive Container schema using a function to handle circular reference
 const ContainerSchema = new mongoose.Schema({
   name: {
-    type:String,
+    type: String,
     default: 'Container'
   },
   container_Id: {
@@ -63,6 +63,14 @@ const ContainerSchema = new mongoose.Schema({
     type: hoverStylesSchema,
     default: () => ({})
   },
+  linkUrl: { type: String, default: '' },
+  linkTarget: {
+    type: String,
+    enum: ['_self', '_blank', '_parent', '_top'],
+    default: '_self'
+  },
+  linkTitle: { type: String, default: '' },
+  isClickable: { type: Boolean, default: false },
   locked: {
     type: Boolean,
     default: false
@@ -72,7 +80,7 @@ const ContainerSchema = new mongoose.Schema({
     default: false
   }
 }, {
-  timestamps: true 
+  timestamps: true
 });
 
 // Workaround to make recursive reference work

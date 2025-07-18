@@ -1,16 +1,17 @@
 "use client";
 import React, { useState } from "react";
-import SaveProjectSection from "./SaveProjectSection";
-import TabNavigation from "./TabNavigation";
-import LayoutTab from "./Tabs/LayoutTab";
-import TextTab from "./Tabs/TextTab";
-import ColorTab from "./Tabs/ColorTab";
-import BorderTab from "./Tabs/BorderTab";
-import HoverTab from "./Tabs/HoverTab";
-import ActionButtons from "./ActionButtons";
-import LibraryTab from "./Tabs/LibraryTab";
+import SaveProjectSection from "../Tabs/SaveProjectSection";
+import TabNavigation from "../Tabs/TabNavigation";
+import LayoutTab from "../Tabs/LayoutTab";
+import TextTab from "../Tabs/TextTab";
+import ColorTab from "../Tabs/ColorTab";
+import BorderTab from "../Tabs/BorderTab";
+import HoverTab from "../Tabs/HoverTab";
+import ActionButtons from "../ActionButtons";
+import LibraryTab from "../Tabs/LibraryTab";
+import LinkTab from "../Tabs/LinkTab";
 
-const tabs = ["Layout", "Text", "Color", "Border", "Hover", "Library"];
+const tabs = ["Layout", "Text", "Color", "Border", "Hover", "Link", "Library"];
 
 const StyleController = ({
   container,
@@ -26,12 +27,22 @@ const StyleController = ({
   rootContainer,
   serializeContainer,
   deserializeContainer,
-  onAddLibraryComponent
+  onAddLibraryComponent,
+  onLinkChange,
+  onToggleClickable
 }) => {
   const [activeTab, setActiveTab] = useState("Layout");
   const [projectName, setProjectName] = useState("");
   const [saveStatus, setSaveStatus] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+
+
+  const handleLinkChange = (property, value) =>
+    onLinkChange(container.container_Id, property, value);
+
+  const handleToggleClickable = (containerId, isClickable) =>
+    onToggleClickable(containerId, isClickable);
+
 
   const handleStyleChange = (property, value) =>
     onStyleChange(container.container_Id, property, value);
@@ -91,7 +102,20 @@ const StyleController = ({
         {activeTab === "Color" && <ColorTab {...tabProps} />}
         {activeTab === "Border" && <BorderTab {...tabProps} />}
         {activeTab === "Hover" && <HoverTab {...tabProps} />}
-        {activeTab === "Library" && <LibraryTab selectedContainerId={container.container_Id} onAddLibraryComponent={onAddLibraryComponent}/>}
+        {/* NEW: Add the Link tab */}
+        {activeTab === "Link" && (
+          <LinkTab
+            container={container}
+            handleLinkChange={handleLinkChange}
+            handleToggleClickable={handleToggleClickable}
+          />
+        )}
+        {activeTab === "Library" && (
+          <LibraryTab
+            selectedContainerId={container.container_Id}
+            onAddLibraryComponent={onAddLibraryComponent}
+          />
+        )}
       </div>
 
       <ActionButtons

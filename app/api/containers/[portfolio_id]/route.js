@@ -16,6 +16,8 @@ export async function GET(request, { params }) {
     }
 
     // Connect to database
+    DbConnect();
+    
     const SavedContainer = await Container.findById(portfolio_id);
     
 
