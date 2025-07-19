@@ -1,4 +1,3 @@
-import Test from "@/components/Test";
 import UiBuilder from "@/components/UiBuilderComponents/UiBuilder";
 import Container from "@/models/Container";
 import DbConnect from "@/lib/db/DbConnect";
@@ -29,9 +28,6 @@ export default async function UiBuilderPage() {
 
 
 
-const Header = undefined;
-
-
 const buttonContainer = {
   container_Id: "btn-001",
   name: "PrimaryButton",
@@ -55,7 +51,7 @@ const buttonContainer = {
 };
 
 
-
+const Temp = undefined
 
 
 
@@ -64,8 +60,7 @@ const buttonContainer = {
 
   return (
     <div className="w-full flex flex-col ">
-      <UiBuilder initialContainer={buttonContainer} />
-      {/* <Test/> */}
+      <UiBuilder initialContainer={Temp} />
     </div>
   );
 }

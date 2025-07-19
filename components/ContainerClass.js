@@ -5,18 +5,26 @@ export default class Container {
     this.name = "New Container";
     this.container_Id = Math.random().toString(36).substr(2, 9);
     this.type = type;
-    this.text = "Sample Text";
+    this.text = "Text";
     this.children = [null, null, null, null];
-    
+
     // NEW: Link properties
     this.linkUrl = "";
     this.linkTarget = "_self"; // "_self", "_blank", "_parent", "_top"
     this.linkTitle = ""; // For accessibility/tooltip
     this.isClickable = false; // Toggle to enable/disable link functionality
-    
+
+    // NEW: Image properties
+    this.imageUrl = "";
+    this.imageAlt = "";
+    this.imageMode = "none"; // "none", "background", "img"
+    this.imagePosition = "center"; // for background images
+    this.imageSize = "cover"; // "cover", "contain", "auto"
+    this.imageRepeat = "no-repeat";
+
     this.styles = {
-      height: "200px",
-      width: "200px",
+      height: "100px",
+      width: "100px",
       borderWidth: "1px",
       borderStyle: "solid",
       borderColor: "#cccccc",
@@ -28,13 +36,22 @@ export default class Container {
       flexDirection: "row",
       justifyContent: "center",
       alignItems: "center",
+      flexWrap: "wrap",
+      position: "relative",
+      minHeight: "fit-content",
+      minWidth: "fit-content",
+      maxWidth: "100%",
+      lineHeight: "1rem",
       fontSize: "0.75rem",
       fontWeight: "400",
-      flexWrap: "wrap",
       borderRadius: "0px",
       boxShadow: "none",
+      cursor: "pointer",
+      outlineOffset: "2px",
       opacity: "1",
       zIndex: "0",
+      transition: "all 0.2s ease",
+
     };
     this.hoverStyles = {
       backgroundColor: "#ffffff",
@@ -57,13 +74,21 @@ export default class Container {
     cloned.children = this.children.map(child => child ? child.clone() : null);
     cloned.locked = this.locked;
     cloned.hidden = this.hidden;
-    
+
     // NEW: Clone link properties
     cloned.linkUrl = this.linkUrl;
     cloned.linkTarget = this.linkTarget;
     cloned.linkTitle = this.linkTitle;
     cloned.isClickable = this.isClickable;
-    
+
+    // NEW: Clone image properties
+    cloned.imageUrl = this.imageUrl;
+    cloned.imageAlt = this.imageAlt;
+    cloned.imageMode = this.imageMode;
+    cloned.imagePosition = this.imagePosition;
+    cloned.imageSize = this.imageSize;
+    cloned.imageRepeat = this.imageRepeat;
+
     return cloned;
   }
 
@@ -83,6 +108,15 @@ export default class Container {
       linkTarget: this.linkTarget,
       linkTitle: this.linkTitle,
       isClickable: this.isClickable,
+
+      // NEW: Include image properties
+      imageUrl: this.imageUrl,
+      imageAlt: this.imageAlt,
+      imageMode: this.imageMode,
+      imagePosition: this.imagePosition,
+      imageSize: this.imageSize,
+      imageRepeat: this.imageRepeat,
+
     };
   }
 
@@ -98,13 +132,21 @@ export default class Container {
     );
     container.locked = data.locked;
     container.hidden = data.hidden;
-    
+
     // NEW: Restore link properties (with defaults for backward compatibility)
     container.linkUrl = data.linkUrl || "";
     container.linkTarget = data.linkTarget || "_self";
     container.linkTitle = data.linkTitle || "";
     container.isClickable = data.isClickable || false;
-    
+
+    // NEW: Restore image properties
+    container.imageUrl = data.imageUrl || "";
+    container.imageAlt = data.imageAlt || "";
+    container.imageMode = data.imageMode || "none";
+    container.imagePosition = data.imagePosition || "center";
+    container.imageSize = data.imageSize || "cover";
+    container.imageRepeat = data.imageRepeat || "no-repeat";
+
     return container;
   }
 }
