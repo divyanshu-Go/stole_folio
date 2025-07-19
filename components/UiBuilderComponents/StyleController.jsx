@@ -10,8 +10,9 @@ import HoverTab from "../Tabs/HoverTab";
 import ActionButtons from "../ActionButtons";
 import LibraryTab from "../Tabs/LibraryTab";
 import LinkTab from "../Tabs/LinkTab";
+import ImageTab from "../Tabs/ImageTab";
 
-const tabs = ["Layout", "Text", "Color", "Border", "Hover", "Link", "Library"];
+const tabs = ["Layout", "Text", "Color", "Border", "Hover", "Link", "Image", "Library"];
 
 const StyleController = ({
   container,
@@ -29,12 +30,18 @@ const StyleController = ({
   deserializeContainer,
   onAddLibraryComponent,
   onLinkChange,
-  onToggleClickable
+  onToggleClickable,
+  onImageChange
 }) => {
   const [activeTab, setActiveTab] = useState("Layout");
   const [projectName, setProjectName] = useState("");
   const [saveStatus, setSaveStatus] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+
+
+
+  const handleImageChange = (property, value) =>
+  onImageChange(container.container_Id, property, value);
 
 
   const handleLinkChange = (property, value) =>
@@ -83,6 +90,7 @@ const StyleController = ({
     handleStyleChange,
     handleTextChange,
     handleHoverChange,
+    handleImageChange
   };
 
   return (
@@ -108,6 +116,12 @@ const StyleController = ({
             container={container}
             handleLinkChange={handleLinkChange}
             handleToggleClickable={handleToggleClickable}
+          />
+        )}
+        {activeTab === "Image" && (
+          <ImageTab
+            container={container}
+            handleImageChange={handleImageChange}
           />
         )}
         {activeTab === "Library" && (

@@ -82,12 +82,12 @@ const LibraryTab = ({ selectedContainerId, onAddLibraryComponent }) => {
                     No components in library
                 </div>
             ) : (
-                <div className="grid grid-cols-2 gap-3 max-h-96 overflow-y-auto py-4">
+                <div className="grid grid-cols-2 gap-3 max-h-80 overflow-y-auto py-4 ">
                     {libraryComponents.map((item) => (
                         <div
                             key={item.id}
                             onClick={() => handleLibraryItemClick(item)}
-                            className={`cursor-pointer transition-all duration-200 mx-auto p-2 ${selectedLibraryItem?.id === item.id
+                            className={`cursor-pointer transition-all duration-200 mx-auto p-1 ${selectedLibraryItem?.id === item.id
                                 ? "ring-2 ring-blue-500 bg-blue-50 rounded-xs"
                                 : "hover:bg-gray-50"
                                 }`}

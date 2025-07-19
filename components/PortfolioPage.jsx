@@ -79,10 +79,17 @@ const PortfolioContainer = ({ container }) => {
     minHeight: container.styles.minHeight || "fit-content",
     maxWidth: "100%",
     transition: "all 0.2s ease",
-    // NEW: Add link-specific styling
     cursor: container.isClickable && container.linkUrl ? "pointer" : "default",
     textDecoration: container.isClickable && container.linkUrl ? "underline" : "none",
+    // NEW: Add background image support
+    ...(container.imageMode === "background" && container.imageUrl && {
+      backgroundImage: `url(${container.imageUrl})`,
+      backgroundPosition: container.imagePosition,
+      backgroundSize: container.imageSize,
+      backgroundRepeat: container.imageRepeat,
+    }),
   };
+
 
   // Common props for both div and anchor elements
   const commonProps = {
@@ -92,32 +99,51 @@ const PortfolioContainer = ({ container }) => {
   };
 
   // NEW: Render as anchor tag if it's clickable and has a URL
+  const renderContent = () => {
+    if (container.imageMode === "img" && container.imageUrl) {
+      return (
+        <img
+          src={container.imageUrl}
+          alt={container.imageAlt}
+          style={{
+            maxWidth: "100%",
+            maxHeight: "100%",
+            objectFit: container.imageSize === "cover" ? "cover" : "contain",
+          }}
+        />
+      );
+    }
+
+    if (container.text && !container.children.some((child) => child !== null)) {
+      return (
+        <span style={{ fontSize: container.styles.fontSize }}>
+          {container.text}
+        </span>
+      );
+    }
+
+    return container.children.map(
+      (child) =>
+        child && (
+          <PortfolioContainer
+            key={child.container_Id}
+            container={child}
+          />
+        )
+    );
+  };
+
+  // Render as anchor tag if it's clickable and has a URL
   if (container.isClickable && container.linkUrl) {
     return (
-      <a
-        {...commonProps}
+
+      <a {...commonProps}
         href={container.linkUrl}
         target={container.linkTarget}
         title={container.linkTitle}
         rel={container.linkTarget === "_blank" ? "noopener noreferrer" : undefined}
       >
-        {/* Render text if no children or if it's a leaf node */}
-        {container.text && !container.children.some((child) => child !== null) && (
-          <span style={{ fontSize: container.styles.fontSize }}>
-            {container.text}
-          </span>
-        )}
-
-        {/* Recursively render children */}
-        {container.children.map(
-          (child) =>
-            child && (
-              <PortfolioContainer
-                key={child.container_Id}
-                container={child}
-              />
-            )
-        )}
+        {renderContent()}
       </a>
     );
   }
@@ -125,23 +151,7 @@ const PortfolioContainer = ({ container }) => {
   // Render as div for non-clickable containers
   return (
     <div {...commonProps}>
-      {/* Render text if no children or if it's a leaf node */}
-      {container.text && !container.children.some((child) => child !== null) && (
-        <span style={{ fontSize: container.styles.fontSize }}>
-          {container.text}
-        </span>
-      )}
-
-      {/* Recursively render children */}
-      {container.children.map(
-        (child) =>
-          child && (
-            <PortfolioContainer
-              key={child.container_Id}
-              container={child}
-            />
-          )
-      )}
+      {renderContent()}
     </div>
   );
 };

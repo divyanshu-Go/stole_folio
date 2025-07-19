@@ -71,6 +71,17 @@ const ContainerSchema = new mongoose.Schema({
   },
   linkTitle: { type: String, default: '' },
   isClickable: { type: Boolean, default: false },
+  // NEW: Image properties
+  imageUrl: { type: String, default: '' },
+  imageAlt: { type: String, default: '' },
+  imageMode: {
+    type: String,
+    enum: ['none', 'background', 'img'],
+    default: 'none'
+  },
+  imagePosition: { type: String, default: 'center' },
+  imageSize: { type: String, default: 'cover' },
+  imageRepeat: { type: String, default: 'no-repeat' },
   locked: {
     type: Boolean,
     default: false

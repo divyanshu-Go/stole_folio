@@ -72,74 +72,93 @@ export default function UIBuilder({ initialContainer }) {
 
 
   // Add library component to selected container
-const addLibraryComponent = (parentId, libraryContainer) => {
-  const update = (container) => {
-    if (container.container_Id === parentId) {
-      const idx = container.children.findIndex((child) => child === null);
-      if (idx !== -1) {
-        const newChildren = [...container.children];
-        // Clone the library component with new ID
-        const clonedComponent = libraryContainer.clone();
-        newChildren[idx] = clonedComponent;
+  const addLibraryComponent = (parentId, libraryContainer) => {
+    const update = (container) => {
+      if (container.container_Id === parentId) {
+        const idx = container.children.findIndex((child) => child === null);
+        if (idx !== -1) {
+          const newChildren = [...container.children];
+          // Clone the library component with new ID
+          const clonedComponent = libraryContainer.clone();
+          newChildren[idx] = clonedComponent;
+          return {
+            ...container,
+            children: newChildren,
+          };
+        }
+      }
+      return {
+        ...container,
+        children: container.children.map((child) =>
+          child ? update(child) : null
+        ),
+      };
+    };
+    setRootContainer(update(rootContainer));
+  };
+
+
+  const updateContainerImage = (container_Id, property, value) => {
+    const update = (container) => {
+      if (container.container_Id === container_Id) {
         return {
           ...container,
-          children: newChildren,
+          [property]: value,
         };
       }
-    }
-    return {
-      ...container,
-      children: container.children.map((child) =>
-        child ? update(child) : null
-      ),
-    };
-  };
-  setRootContainer(update(rootContainer));
-};
-
-
-
-// Update container link properties
-const updateContainerLink = (container_Id, linkProperty, value) => {
-  const update = (container) => {
-    if (container.container_Id === container_Id) {
       return {
         ...container,
-        [linkProperty]: value,
+        children: container.children.map((child) =>
+          child ? update(child) : null
+        ),
       };
-    }
-    return {
-      ...container,
-      children: container.children.map((child) =>
-        child ? update(child) : null
-      ),
     };
+    setRootContainer(update(rootContainer));
   };
-  setRootContainer(update(rootContainer));
-};
 
 
-// Toggle clickable functionality for a container
-const toggleContainerClickable = (container_Id, isClickable) => {
-  const update = (container) => {
-    if (container.container_Id === container_Id) {
+
+  // Update container link properties
+  const updateContainerLink = (container_Id, linkProperty, value) => {
+    const update = (container) => {
+      if (container.container_Id === container_Id) {
+        return {
+          ...container,
+          [linkProperty]: value,
+        };
+      }
       return {
         ...container,
-        isClickable: isClickable,
-        // Clear URL when disabling clickable to avoid confusion
-        linkUrl: isClickable ? container.linkUrl : "",
-        linkTitle: isClickable ? container.linkTitle : "",
+        children: container.children.map((child) =>
+          child ? update(child) : null
+        ),
       };
-    }
-    return {
-      ...container,
-      children: container.children.map((child) =>
-        child ? update(child) : null
-      ),
     };
+    setRootContainer(update(rootContainer));
   };
-  setRootContainer(update(rootContainer));
-};
+
+
+  // Toggle clickable functionality for a container
+  const toggleContainerClickable = (container_Id, isClickable) => {
+    const update = (container) => {
+      if (container.container_Id === container_Id) {
+        return {
+          ...container,
+          isClickable: isClickable,
+          // Clear URL when disabling clickable to avoid confusion
+          linkUrl: isClickable ? container.linkUrl : "",
+          linkTitle: isClickable ? container.linkTitle : "",
+        };
+      }
+      return {
+        ...container,
+        children: container.children.map((child) =>
+          child ? update(child) : null
+        ),
+      };
+    };
+    setRootContainer(update(rootContainer));
+  };
 
 
   // Recursively updates the style of the container with given ID
@@ -269,11 +288,12 @@ const toggleContainerClickable = (container_Id, isClickable) => {
     <div className="min-h-screen bg-gray-100 p-3 ">
       <div className="max-w-7xl mx-auto ">
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 min-h-[42rem]">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
           {/* Preview Section */}
-          <div className="flex flex-col bg-white rounded">
+          <div className="flex flex-col bg-white rounded h-[60vh] md:h-[80vh] ">
             <h2 className="text-lg text-white font-bold mb-4 py-1 rounded-t text-center bg-blue-500">Preview</h2>
-            <div className=" flex-1 border border-dashed border-gray-400 p-2 min-h-[28rem] bg-gray-50">
+            <div className="flex-1 border border-dashed border-gray-400 py-4 px-2 overflow-y-auto min-h-0 bg-gray-50 ">
+              
               <PreviewContainer
                 container={rootContainer}
                 selectedContainerId={selectedContainerId}
@@ -303,6 +323,7 @@ const toggleContainerClickable = (container_Id, isClickable) => {
                 onAddLibraryComponent={addLibraryComponent}
                 onLinkChange={updateContainerLink}
                 onToggleClickable={toggleContainerClickable}
+                onImageChange={updateContainerImage}
               />
             )}
           </div>
