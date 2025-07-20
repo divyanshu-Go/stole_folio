@@ -70,17 +70,15 @@ const PreviewContainer = ({ container, selectedContainerId, onSelect, previewMod
 
   const containerStyle = {
     ...container.styles,
-    cursor: container.isClickable ? "pointer" : "pointer", // Always pointer for selection
-    position: "relative",
-    minHeight: "fit-content",
-    maxWidth: "100%",
-    fontSize: "0.75rem", 
-    lineHeight: "1rem",
     outline: isSelected ? "2px solid #3b82f6" : "none",
-    outlineOffset: "2px",
-    transition: "all 0.2s ease",
     // Add link-specific styling
     textDecoration: container.isClickable && container.linkUrl ? "underline" : "none",
+    ...(container.imageMode === "background" && container.imageUrl && {
+      backgroundImage: `url(${container.imageUrl})`,
+      backgroundPosition: container.imagePosition,
+      backgroundSize: container.imageSize,
+      backgroundRepeat: container.imageRepeat,
+    }),
   };
 
   // Common props for both div and anchor elements
@@ -91,44 +89,58 @@ const PreviewContainer = ({ container, selectedContainerId, onSelect, previewMod
     onMouseLeave: handleMouseLeave,
   };
 
-  // Render as anchor tag if it's clickable and has a URL
+  const renderContent = () => {
+    if (container.imageMode === "img" && container.imageUrl) {
+      return (
+        <img
+          src={container.imageUrl}
+          alt={container.imageAlt}
+          style={{
+            maxWidth: "100%",
+            maxHeight: "100%",
+            objectFit: container.imageSize === "cover" ? "cover" : "contain",
+          }}
+        />
+      );
+    }
+
+    if (container.text && !container.children.some((child) => child !== null)) {
+      return (
+        <span style={{ fontSize: container.styles.fontSize }}>
+          {container.text}
+        </span>
+      );
+    }
+
+    return container.children.map(
+      (child) =>
+        child && (
+          <PreviewContainer
+            key={child.container_Id}
+            container={child}
+            selectedContainerId={selectedContainerId}
+            onSelect={onSelect}
+            previewMode={previewMode}
+          />
+        )
+    );
+  };
+
+  // Update both the anchor and div returns to use renderContent()
   if (container.isClickable && container.linkUrl) {
     return (
-      <a
-        {...commonProps}
-        href={container.linkUrl}
-        target={container.linkTarget}
-        title={container.linkTitle}
-        rel={container.linkTarget === "_blank" ? "noopener noreferrer" : undefined}
-      >
+      <a {...commonProps}>
         {isSelected && (
           <div className="absolute -top-6 -left-1 bg-blue-500 font-normal text-white px-1.5 py-0.5 text-[10px] rounded-t-sm flex items-center gap-1">
             Selected
             <span className="text-[8px]">🔗</span>
           </div>
         )}
-
-        {container.text && !container.children.some((child) => child !== null) && (
-          <span style={{ fontSize: container.styles.fontSize }}>{container.text}</span>
-        )}
-
-        {container.children.map(
-          (child) =>
-            child && (
-              <PreviewContainer
-                key={child.container_Id}
-                container={child}
-                selectedContainerId={selectedContainerId}
-                onSelect={onSelect}
-                previewMode={previewMode}
-              />
-            )
-        )}
+        {renderContent()}
       </a>
     );
   }
 
-  // Render as div for non-clickable containers
   return (
     <div {...commonProps}>
       {isSelected && (
@@ -136,23 +148,7 @@ const PreviewContainer = ({ container, selectedContainerId, onSelect, previewMod
           Selected
         </div>
       )}
-
-      {container.text && !container.children.some((child) => child !== null) && (
-        <span style={{ fontSize: container.styles.fontSize }}>{container.text}</span>
-      )}
-
-      {container.children.map(
-        (child) =>
-          child && (
-            <PreviewContainer
-              key={child.container_Id}
-              container={child}
-              selectedContainerId={selectedContainerId}
-              onSelect={onSelect}
-              previewMode={previewMode}
-            />
-          )
-      )}
+      {renderContent()}
     </div>
   );
 };

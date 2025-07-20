@@ -33,11 +33,18 @@ export async function POST(request) {
         children: container.children ? container.children.map(child => transformContainer(child)) : [],
         locked: container.locked || false,
         hidden: container.hidden || false,
-        // NEW: Add link properties
+        // Link properties
         linkUrl: container.linkUrl || '',
         linkTarget: container.linkTarget || '_self',
         linkTitle: container.linkTitle || '',
-        isClickable: container.isClickable || false
+        isClickable: container.isClickable || false,
+        // NEW: Add image properties
+        imageUrl: container.imageUrl || '',
+        imageAlt: container.imageAlt || '',
+        imageMode: container.imageMode || 'none',
+        imagePosition: container.imagePosition || 'center',
+        imageSize: container.imageSize || 'cover',
+        imageRepeat: container.imageRepeat || 'no-repeat'
       };
     };
 
