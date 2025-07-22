@@ -22,12 +22,19 @@ export default class Container {
     this.imageSize = "cover"; // "cover", "contain", "auto"
     this.imageRepeat = "no-repeat";
 
+    // NEW: Icon properties
+    this.iconName = ""; // Lucide icon name (e.g., "Heart", "Star", "Home")
+    this.iconSize = "16"; // Icon size in pixels
+    this.iconColor = "transparent"; // Icon color (inherit from container or custom)
+    this.hasIcon = false; // Toggle to show/hide icon
+
     this.styles = {
       height: "100px",
       width: "100px",
       borderWidth: "1px",
       borderStyle: "solid",
       borderColor: "#cccccc",
+      boxSizing: "border-box",
       padding: "4px",
       margin: "0px",
       backgroundColor: "#ffffff",
@@ -39,8 +46,11 @@ export default class Container {
       flexWrap: "wrap",
       position: "relative",
       minHeight: "fit-content",
-      minWidth: "fit-content",
+      // minWidth: "fit-content",
       maxWidth: "100%",
+      textAlign: "center",
+      textWrap: "wrap",
+      wordWrap: "break-word",
       lineHeight: "1rem",
       fontSize: "0.75rem",
       fontWeight: "400",
@@ -51,7 +61,6 @@ export default class Container {
       opacity: "1",
       zIndex: "0",
       transition: "all 0.2s ease",
-
     };
     this.hoverStyles = {
       backgroundColor: "#ffffff",
@@ -71,7 +80,9 @@ export default class Container {
     cloned.text = this.text;
     cloned.styles = { ...this.styles };
     cloned.hoverStyles = { ...this.hoverStyles };
-    cloned.children = this.children.map(child => child ? child.clone() : null);
+    cloned.children = this.children.map((child) =>
+      child ? child.clone() : null
+    );
     cloned.locked = this.locked;
     cloned.hidden = this.hidden;
 
@@ -89,6 +100,12 @@ export default class Container {
     cloned.imageSize = this.imageSize;
     cloned.imageRepeat = this.imageRepeat;
 
+    // NEW: Clone icon properties
+    cloned.iconName = this.iconName;
+    cloned.iconSize = this.iconSize;
+    cloned.iconColor = this.iconColor;
+    cloned.hasIcon = this.hasIcon;
+
     return cloned;
   }
 
@@ -100,7 +117,7 @@ export default class Container {
       text: this.text,
       styles: this.styles,
       hoverStyles: this.hoverStyles,
-      children: this.children.map(child => child ? child.toJSON() : null),
+      children: this.children.map((child) => (child ? child.toJSON() : null)),
       locked: this.locked,
       hidden: this.hidden,
       // NEW: Include link properties in serialization
@@ -117,6 +134,11 @@ export default class Container {
       imageSize: this.imageSize,
       imageRepeat: this.imageRepeat,
 
+      // NEW: Include icon properties
+      iconName: this.iconName,
+      iconSize: this.iconSize,
+      iconColor: this.iconColor,
+      hasIcon: this.hasIcon,
     };
   }
 
@@ -127,7 +149,7 @@ export default class Container {
     container.text = data.text;
     container.styles = { ...container.styles, ...data.styles };
     container.hoverStyles = { ...container.hoverStyles, ...data.hoverStyles };
-    container.children = data.children.map(child =>
+    container.children = data.children.map((child) =>
       child ? Container.fromJSON(child) : null
     );
     container.locked = data.locked;
@@ -146,6 +168,12 @@ export default class Container {
     container.imagePosition = data.imagePosition || "center";
     container.imageSize = data.imageSize || "cover";
     container.imageRepeat = data.imageRepeat || "no-repeat";
+
+    // NEW: Restore icon properties
+    container.iconName = data.iconName || "";
+    container.iconSize = data.iconSize || "16";
+    container.iconColor = data.iconColor || "transparent";
+    container.hasIcon = data.hasIcon || false;
 
     return container;
   }

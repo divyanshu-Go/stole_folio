@@ -4,21 +4,26 @@
 
 import React from "react";
 
-const PreviewContainer = ({ container, selectedContainerId, onSelect, previewMode = false }) => {
+const PreviewContainer = ({
+  container,
+  selectedContainerId,
+  onSelect,
+  previewMode = false,
+}) => {
   const handleClick = (e) => {
     e.stopPropagation();
-    
+
     // In preview mode, allow link navigation
     if (previewMode && container.isClickable && container.linkUrl) {
       // Let the link handle its own navigation
       return;
     }
-    
+
     // In edit mode, prevent link navigation and handle selection
     if (container.isClickable && container.linkUrl) {
       e.preventDefault();
     }
-    
+
     onSelect(container.container_Id);
   };
 
@@ -28,7 +33,10 @@ const PreviewContainer = ({ container, selectedContainerId, onSelect, previewMod
     const hoverStyles = container.hoverStyles || {};
 
     // Apply hover styles
-    if (hoverStyles.backgroundColor && hoverStyles.backgroundColor !== "transparent") {
+    if (
+      hoverStyles.backgroundColor &&
+      hoverStyles.backgroundColor !== "transparent"
+    ) {
       target.style.backgroundColor = hoverStyles.backgroundColor;
     }
 
@@ -72,13 +80,15 @@ const PreviewContainer = ({ container, selectedContainerId, onSelect, previewMod
     ...container.styles,
     outline: isSelected ? "2px solid #3b82f6" : "none",
     // Add link-specific styling
-    textDecoration: container.isClickable && container.linkUrl ? "underline" : "none",
-    ...(container.imageMode === "background" && container.imageUrl && {
-      backgroundImage: `url(${container.imageUrl})`,
-      backgroundPosition: container.imagePosition,
-      backgroundSize: container.imageSize,
-      backgroundRepeat: container.imageRepeat,
-    }),
+    textDecoration:
+      container.isClickable && container.linkUrl ? "underline" : "none",
+    ...(container.imageMode === "background" &&
+      container.imageUrl && {
+        backgroundImage: `url(${container.imageUrl})`,
+        backgroundPosition: container.imagePosition,
+        backgroundSize: container.imageSize,
+        backgroundRepeat: container.imageRepeat,
+      }),
   };
 
   // Common props for both div and anchor elements
@@ -90,6 +100,38 @@ const PreviewContainer = ({ container, selectedContainerId, onSelect, previewMod
   };
 
   const renderContent = () => {
+    if (container.hasIcon && container.iconName) {
+      try {
+        // Dynamically import the Lucide icon
+        const LucideIcon = require("lucide-react")[container.iconName];
+        if (LucideIcon) {
+          return React.createElement(LucideIcon, {
+            size: parseInt(container.iconSize) || 16,
+            color:
+              container.iconColor === "inherit"
+                ? container.styles.color
+                : container.iconColor,
+            style: { flexShrink: 0 },
+          });
+        } else {
+          // Fallback icon for invalid names
+          const HelpCircle = require("lucide-react").HelpCircle;
+          return React.createElement(HelpCircle, {
+            size: parseInt(container.iconSize) || 16,
+            color:
+              container.iconColor === "inherit"
+                ? container.styles.color
+                : container.iconColor,
+            style: { flexShrink: 0 },
+          });
+        }
+      } catch (error) {
+        // Fallback for any import errors
+        return <span style={{ fontSize: `${container.iconSize}px` }}>❓</span>;
+      }
+    }
+
+    
     if (container.imageMode === "img" && container.imageUrl) {
       return (
         <img

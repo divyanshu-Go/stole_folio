@@ -4,9 +4,12 @@ import React, { useState } from "react";
 import PreviewContainer from "@/components/UiBuilderComponents/PreviewContainer";
 import StyleController from "@/components/UiBuilderComponents/StyleController";
 import Container from "../ContainerClass";
-import { cloneContainer, deserializeContainer, findContainer, serializeContainer } from "@/lib/utils/container";
-
-
+import {
+  cloneContainer,
+  deserializeContainer,
+  findContainer,
+  serializeContainer,
+} from "@/lib/utils/container";
 
 export default function UIBuilder({ initialContainer }) {
   const createDefaultContainer = () => new Container();
@@ -21,17 +24,14 @@ export default function UIBuilder({ initialContainer }) {
   });
 
   // Initialize selectedContainerId with the root container's ID
-  const [selectedContainerId, setSelectedContainerId] = useState(
-    () => {
-      if (initialContainer) {
-        return initialContainer.container_Id;
-      }
-      return createDefaultContainer().container_Id;
+  const [selectedContainerId, setSelectedContainerId] = useState(() => {
+    if (initialContainer) {
+      return initialContainer.container_Id;
     }
-  );
+    return createDefaultContainer().container_Id;
+  });
 
   const [copiedContainer, setCopiedContainer] = useState(null);
-
 
   // Copy container function
   const copyContainer = (containerId) => {
@@ -40,7 +40,6 @@ export default function UIBuilder({ initialContainer }) {
       setCopiedContainer(cloneContainer(containerToCopy));
     }
   };
-
 
   // Paste container function
   const pasteContainer = (parentId) => {
@@ -70,7 +69,6 @@ export default function UIBuilder({ initialContainer }) {
     setRootContainer(update(rootContainer));
   };
 
-
   // Add library component to selected container
   const addLibraryComponent = (parentId, libraryContainer) => {
     const update = (container) => {
@@ -97,6 +95,23 @@ export default function UIBuilder({ initialContainer }) {
     setRootContainer(update(rootContainer));
   };
 
+  const updateContainerIcon = (container_Id, property, value) => {
+    const update = (container) => {
+      if (container.container_Id === container_Id) {
+        return {
+          ...container,
+          [property]: value,
+        };
+      }
+      return {
+        ...container,
+        children: container.children.map((child) =>
+          child ? update(child) : null
+        ),
+      };
+    };
+    setRootContainer(update(rootContainer));
+  };
 
   const updateContainerImage = (container_Id, property, value) => {
     const update = (container) => {
@@ -116,8 +131,6 @@ export default function UIBuilder({ initialContainer }) {
     setRootContainer(update(rootContainer));
   };
 
-
-
   // Update container link properties
   const updateContainerLink = (container_Id, linkProperty, value) => {
     const update = (container) => {
@@ -136,7 +149,6 @@ export default function UIBuilder({ initialContainer }) {
     };
     setRootContainer(update(rootContainer));
   };
-
 
   // Toggle clickable functionality for a container
   const toggleContainerClickable = (container_Id, isClickable) => {
@@ -159,7 +171,6 @@ export default function UIBuilder({ initialContainer }) {
     };
     setRootContainer(update(rootContainer));
   };
-
 
   // Recursively updates the style of the container with given ID
   const updateContainerStyle = (container_Id, property, value) => {
@@ -230,7 +241,6 @@ export default function UIBuilder({ initialContainer }) {
         newChild.styles.height = "fit-content";
         newChild.styles.backgroundColor = "#f3f4f6";
 
-
         const idx = container.children.findIndex((child) => child === null);
         if (idx !== -1) {
           const newChildren = [...container.children];
@@ -282,18 +292,16 @@ export default function UIBuilder({ initialContainer }) {
   const selectedContainer = findContainer(rootContainer, selectedContainerId);
   const isRootSelected = selectedContainerId === rootContainer.container_Id;
 
-
-
   return (
     <div className="min-h-screen bg-gray-100 p-3 ">
       <div className="max-w-7xl mx-auto ">
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
           {/* Preview Section */}
-          <div className="flex flex-col bg-white rounded h-[60vh] md:h-[80vh] ">
-            <h2 className="text-lg text-white font-bold mb-4 py-1 rounded-t text-center bg-blue-500">Preview</h2>
+          <div className="flex flex-col bg-white rounded h-[60vh] md:h-[90vh] ">
+            <h2 className="text-lg text-white font-bold mb-4 py-1 rounded-t text-center bg-blue-500">
+              Preview
+            </h2>
             <div className="flex-1 border border-dashed border-gray-400 py-4 px-2 overflow-y-auto min-h-0 bg-gray-50 ">
-              
               <PreviewContainer
                 container={rootContainer}
                 selectedContainerId={selectedContainerId}
@@ -304,7 +312,9 @@ export default function UIBuilder({ initialContainer }) {
 
           {/* Controller Section */}
           <div className="flex flex-col bg-white rounded">
-            <h2 className="text-lg text-white font-bold mb-4 py-1 rounded-t text-center bg-blue-500">Controls</h2>
+            <h2 className="text-lg text-white font-bold mb-4 py-1 rounded-t text-center bg-blue-500">
+              Controls
+            </h2>
             {selectedContainer && (
               <StyleController
                 container={selectedContainer}
@@ -324,6 +334,7 @@ export default function UIBuilder({ initialContainer }) {
                 onLinkChange={updateContainerLink}
                 onToggleClickable={toggleContainerClickable}
                 onImageChange={updateContainerImage}
+                onIconChange={updateContainerIcon}
               />
             )}
           </div>
@@ -331,10 +342,4 @@ export default function UIBuilder({ initialContainer }) {
       </div>
     </div>
   );
-
-};
-
-
-
-
-
+}

@@ -242,20 +242,96 @@ export const PaddingSelector = ({ value, onChange }) => {
 };
 
 
+// Margin control
+export const MarginSelector = ({ value, onChange }) => {
+  const options = ["0px", "2px", "4px", "6px", "8px"];
+
+  return (
+    <div className="flex gap-1">
+      {options.map((option) => (
+        <button
+          key={option}
+          onClick={() => onChange(option)}
+          className={`px-2 py-1 text-xs rounded ${
+            value === option
+              ? "bg-blue-500 text-white"
+              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+          }`}
+        >
+          {option}
+        </button>
+      ))}
+    </div>
+  );
+};
+
+// Gap control
+export const GapSelector = ({ value, onChange }) => {
+  const options = ["0px", "4px", "8px", "12px", "16px"];
+
+  return (
+    <div className="flex gap-1">
+      {options.map((option) => (
+        <button
+          key={option}
+          onClick={() => onChange(option)}
+          className={`px-2 py-1 text-xs rounded ${
+            value === option
+              ? "bg-blue-500 text-white"
+              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+          }`}
+        >
+          {option}
+        </button>
+      ))}
+    </div>
+  );
+};
+
+
+
+
+// TextAlignSelector.jsx
+export const TextAlignSelector = ({ value, onChange }) => {
+  const options = ["left", "center", "right", "justify"];
+
+  return (
+    <div className="flex gap-1">
+      {options.map((option) => (
+        <button
+          key={option}
+          onClick={() => onChange(option)}
+          className={`px-2 py-1 text-xs rounded ${
+            value === option
+              ? "bg-blue-500 text-white"
+              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+          }`}
+        >
+          {option}
+        </button>
+      ))}
+    </div>
+  );
+};
+
+
 
 
 
 // Font Size Selector component
 export const FontSizeSelector = ({ value, onChange }) => {
   const options = [
-    { value: "14px", label: "small" },
-    { value: "16px", label: "normal" },
-    { value: "18px", label: "large" },
-    { value: "20px", label: "extra-large" },
-  ];
+  { value: "12px", label: "tiny" },
+  { value: "14px", label: "small" },
+  { value: "16px", label: "normal" },
+  { value: "18px", label: "medium" },
+  { value: "20px", label: "large" },
+  { value: "24px", label: "x-large" },
+  { value: "32px", label: "huge" },
+];
 
   return (
-    <div className="flex gap-1">
+    <div className="grid grid-cols-4 gap-1">
       {options.map((option) => (
         <button
           key={option.value}
@@ -275,15 +351,18 @@ export const FontSizeSelector = ({ value, onChange }) => {
 // Font Weight Selector component
 export const FontWeightSelector = ({ value, onChange }) => {
   const options = [
-    { value: "normal", label: "normal" },
-    { value: "500", label: "medium" },
-    { value: "bold", label: "bold" },
-    { value: "800", label: "extra-bold" },
+  { value: "300", label: "light" },
+  { value: "400", label: "normal" },
+  { value: "500", label: "medium" },
+  { value: "600", label: "semi-bold" },
+  { value: "700", label: "bold" },
+  { value: "800", label: "extra-bold" },
+  { value: "900", label: "black" },
+];
 
-  ];
 
   return (
-    <div className="flex gap-1">
+    <div className="grid grid-cols-4 gap-1">
       {options.map((option) => (
         <button
           key={option.value}

@@ -1,9 +1,6 @@
 "use client";
 import React from "react";
-import {
-  FontSizeSelector,
-  FontWeightSelector,
-} from "../Controls"; // adjust path if needed
+import { FontSizeSelector, FontWeightSelector, TextAlignSelector } from "../Controls"; // adjust path if needed
 
 const TextTab = ({ container, handleStyleChange, handleTextChange }) => {
   return (
@@ -17,6 +14,15 @@ const TextTab = ({ container, handleStyleChange, handleTextChange }) => {
           onChange={(e) => handleTextChange(e.target.value)}
           className="w-full p-1 border rounded text-xs"
           placeholder="Enter text..."
+        />
+      </div>
+
+      {/* Text Align */}
+      <div>
+        <label className="block text-xs font-medium mb-1">Text Align</label>
+        <TextAlignSelector
+          value={container.styles.textAlign}
+          onChange={(value) => handleStyleChange("textAlign", value)}
         />
       </div>
 

@@ -82,6 +82,10 @@ const ContainerSchema = new mongoose.Schema({
   imagePosition: { type: String, default: 'center' },
   imageSize: { type: String, default: 'cover' },
   imageRepeat: { type: String, default: 'no-repeat' },
+  iconName: {type:String, default:''},
+  iconSize: {type:String, default: "16"},
+  iconColor: {type: String, default: "transparent"},
+  hasIcon: {type: String, default: false},
   locked: {
     type: Boolean,
     default: false

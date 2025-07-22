@@ -6,6 +6,8 @@ import {
   AlignItemsSelector,
   SizeSelector,
   PaddingSelector,
+  MarginSelector,
+  GapSelector,
 } from "../Controls"; // adjust import path if needed
 
 const LayoutTab = ({ container, handleStyleChange }) => {
@@ -22,7 +24,9 @@ const LayoutTab = ({ container, handleStyleChange }) => {
 
       {/* Justify Content */}
       <div>
-        <label className="block text-xs font-medium mb-1">Justify Content</label>
+        <label className="block text-xs font-medium mb-1">
+          Justify Content
+        </label>
         <JustifyContentSelector
           value={container.styles.justifyContent}
           onChange={(value) => handleStyleChange("justifyContent", value)}
@@ -60,6 +64,24 @@ const LayoutTab = ({ container, handleStyleChange }) => {
         <PaddingSelector
           value={container.styles.padding}
           onChange={(value) => handleStyleChange("padding", value)}
+        />
+      </div>
+
+      {/* Margin */}
+      <div>
+        <label className="block text-xs font-medium mb-1">Margin</label>
+        <MarginSelector
+          value={container.styles.margin}
+          onChange={(value) => handleStyleChange("margin", value)}
+        />
+      </div>
+
+      {/* Gap */}
+      <div>
+        <label className="block text-xs font-medium mb-1">Gap</label>
+        <GapSelector
+          value={container.styles.gap}
+          onChange={(value) => handleStyleChange("gap", value)}
         />
       </div>
     </div>

@@ -11,8 +11,19 @@ import ActionButtons from "../ActionButtons";
 import LibraryTab from "../Tabs/LibraryTab";
 import LinkTab from "../Tabs/LinkTab";
 import ImageTab from "../Tabs/ImageTab";
+import IconTab from "../Tabs/IconTab";
 
-const tabs = ["Layout", "Text", "Color", "Border", "Hover", "Link", "Image", "Library"];
+const tabs = [
+  "Layout",
+  "Text",
+  "Color",
+  "Border",
+  "Hover",
+  "Link",
+  "Image",
+  "Icon",
+  "Library",
+];
 
 const StyleController = ({
   container,
@@ -31,18 +42,19 @@ const StyleController = ({
   onAddLibraryComponent,
   onLinkChange,
   onToggleClickable,
-  onImageChange
+  onImageChange,
+  onIconChange,
 }) => {
   const [activeTab, setActiveTab] = useState("Layout");
   const [projectName, setProjectName] = useState("");
   const [saveStatus, setSaveStatus] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
-
+  const handleIconChange = (property, value) =>
+    onIconChange(container.container_Id, property, value);
 
   const handleImageChange = (property, value) =>
-  onImageChange(container.container_Id, property, value);
-
+    onImageChange(container.container_Id, property, value);
 
   const handleLinkChange = (property, value) =>
     onLinkChange(container.container_Id, property, value);
@@ -50,26 +62,27 @@ const StyleController = ({
   const handleToggleClickable = (containerId, isClickable) =>
     onToggleClickable(containerId, isClickable);
 
-
   const handleStyleChange = (property, value) =>
     onStyleChange(container.container_Id, property, value);
 
   const handleTextChange = (value) =>
     onTextChange(container.container_Id, value);
 
-  const handleHoverChange = (property, value) => 
+  const handleHoverChange = (property, value) =>
     onHoverStyleChange(container.container_Id, property, value);
 
   const handleSave = async () => {
     setIsSaving(true);
-    setSaveStatus('');
+    setSaveStatus("");
     try {
-      const response = await fetch('/api/containers', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/containers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          containerData: serializeContainer(deserializeContainer(rootContainer)),
-          projectName: projectName || 'Untitled Project',
+          containerData: serializeContainer(
+            deserializeContainer(rootContainer)
+          ),
+          projectName: projectName || "Untitled Project",
         }),
       });
 
@@ -90,7 +103,8 @@ const StyleController = ({
     handleStyleChange,
     handleTextChange,
     handleHoverChange,
-    handleImageChange
+    handleImageChange,
+    handleIconChange,
   };
 
   return (
@@ -102,7 +116,11 @@ const StyleController = ({
         projectName={projectName}
         setProjectName={setProjectName}
       />
-      <TabNavigation tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
+      <TabNavigation
+        tabs={tabs}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+      />
 
       <div className="space-y-3">
         {activeTab === "Layout" && <LayoutTab {...tabProps} />}
@@ -123,6 +141,9 @@ const StyleController = ({
             container={container}
             handleImageChange={handleImageChange}
           />
+        )}
+        {activeTab === "Icon" && (
+          <IconTab container={container} handleIconChange={handleIconChange} />
         )}
         {activeTab === "Library" && (
           <LibraryTab

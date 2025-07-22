@@ -23,7 +23,7 @@ const LibraryTab = ({ selectedContainerId, onAddLibraryComponent }) => {
                 if (result.success) {
                     const processedComponents = result.data.map(item => ({
                         id: item._id,
-                        name: item.name,
+                        name: item.projectName,
                         container: Container.fromJSON(convertToPlainObject(item))
                     }));
                     setLibraryComponents(processedComponents);

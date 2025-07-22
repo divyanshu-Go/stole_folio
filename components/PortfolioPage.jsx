@@ -100,6 +100,34 @@ const PortfolioContainer = ({ container }) => {
 
   // NEW: Render as anchor tag if it's clickable and has a URL
   const renderContent = () => {
+
+    if (container.hasIcon && container.iconName) {
+    try {
+      // Dynamically import the Lucide icon
+      const LucideIcon = require('lucide-react')[container.iconName];
+      if (LucideIcon) {
+        return React.createElement(LucideIcon, {
+          size: parseInt(container.iconSize) || 16,
+          color: container.iconColor === "transparent" ? container.styles.color : container.iconColor,
+          style: { flexShrink: 0 }
+        });
+      } else {
+        // Fallback icon for invalid names
+        const HelpCircle = require('lucide-react').HelpCircle;
+        return React.createElement(HelpCircle, {
+          size: parseInt(container.iconSize) || 16,
+          color: container.iconColor === "transparent" ? container.styles.color : container.iconColor,
+          style: { flexShrink: 0 }
+        });
+      }
+    } catch (error) {
+      // Fallback for any import errors
+      return <span style={{ fontSize: `${container.iconSize}px` }}>❓</span>;
+    }
+  }
+
+
+
     if (container.imageMode === "img" && container.imageUrl) {
       return (
         <img
