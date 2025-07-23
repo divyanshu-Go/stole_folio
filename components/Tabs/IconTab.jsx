@@ -58,16 +58,35 @@ const IconColorInput = ({ label, property, value, onChange }) => (
 
 // Common Lucide icons for quick selection
 const commonIcons = [
-  "Heart", "Star", "Home", "User", "Settings", "Search", "Plus", "Minus",
-  "Check", "X", "ArrowRight", "ArrowLeft", "ArrowUp", "ArrowDown",
-  "Mail", "Phone", "Camera", "Image", "Download", "Upload", "Edit", "Trash2"
+  "Heart",
+  "Star",
+  "Home",
+  "User",
+  "Settings",
+  "Search",
+  "Plus",
+  "Minus",
+  "Check",
+  "X",
+  "ArrowRight",
+  "ArrowLeft",
+  "ArrowUp",
+  "ArrowDown",
+  "Mail",
+  "Phone",
+  "Camera",
+  "Image",
+  "Download",
+  "Upload",
+  "Edit",
+  "Trash2",
 ];
 
 const IconTab = ({ container, handleIconChange }) => {
   const validateIconName = (iconName) => {
     if (!iconName) return true; // Empty is valid
     try {
-      const LucideIcon = require('lucide-react')[iconName];
+      const LucideIcon = require("lucide-react")[iconName];
       return !!LucideIcon;
     } catch {
       return false;
@@ -75,7 +94,7 @@ const IconTab = ({ container, handleIconChange }) => {
   };
 
   const isValidIconName = validateIconName(container.iconName);
-  const hasIcon = container.hasIcon;
+  const hasIcon = container.hasIcon === true || container.hasIcon === "true";
 
   const handleQuickSelect = (iconName) => {
     handleIconChange("iconName", iconName);
@@ -115,8 +134,8 @@ const IconTab = ({ container, handleIconChange }) => {
           value={container.iconName}
           onChange={(e) => handleIconChange("iconName", e.target.value)}
           className={`w-full p-1 border rounded text-xs ${
-            !isValidIconName && container.iconName 
-              ? "border-red-300 bg-red-50" 
+            !isValidIconName && container.iconName
+              ? "border-red-300 bg-red-50"
               : "border-gray-300"
           }`}
           placeholder="Heart, Star, Home, etc."
@@ -143,7 +162,7 @@ const IconTab = ({ container, handleIconChange }) => {
               disabled={!hasIcon}
               title={iconName}
             >
-              {iconName.substring(0, 4)}
+              {iconName}
             </button>
           ))}
         </div>
@@ -179,7 +198,9 @@ const IconTab = ({ container, handleIconChange }) => {
             <div>Name: {container.iconName || "None"}</div>
             {container.iconName ? (
               <div className="mt-1">
-                {isValidIconName ? "✓ Icon will display" : "⚠ Invalid icon name"}
+                {isValidIconName
+                  ? "✓ Icon will display"
+                  : "⚠ Invalid icon name"}
               </div>
             ) : (
               <div className="mt-1">Enter an icon name to display</div>

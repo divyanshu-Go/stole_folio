@@ -14,7 +14,7 @@ const ActionButtons = ({
 
   
 const canAddChild =
-  !container.hasIcon &&
+  (container.hasIcon !== true && container.hasIcon !== "true") &&
   !container.isClickable &&
   !container.imageUrl &&
   container.children.filter((child) => child !== null).length < 4;

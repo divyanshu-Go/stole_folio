@@ -43,6 +43,7 @@ export default class Container {
       flexDirection: "row",
       justifyContent: "center",
       alignItems: "center",
+      gap: "0px",
       flexWrap: "wrap",
       position: "relative",
       minHeight: "fit-content",
@@ -63,7 +64,7 @@ export default class Container {
       transition: "all 0.2s ease",
     };
     this.hoverStyles = {
-      backgroundColor: "#ffffff",
+      backgroundColor: "transparent",
       color: "transparent",
       borderColor: "transparent",
       opacity: "100",
