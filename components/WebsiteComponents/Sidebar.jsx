@@ -1,8 +1,9 @@
 'use client';
-
 import { useEffect } from 'react';
+import Link from 'next/link'; // ✅ Import Next.js Link
 
 const Sidebar = ({ isOpen, onClose, menuItems }) => {
+  
   // Close sidebar when clicking outside
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -11,70 +12,46 @@ const Sidebar = ({ isOpen, onClose, menuItems }) => {
       }
     };
 
-    document.addEventListener('mousedown', handleOutsideClick);
-    return () => document.removeEventListener('mousedown', handleOutsideClick);
-  }, [isOpen, onClose]);
-
-  // Prevent body scroll when sidebar is open
-  useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
+      document.addEventListener('mousedown', handleOutsideClick);
     }
-    
+
     return () => {
-      document.body.style.overflow = 'unset';
+      document.removeEventListener('mousedown', handleOutsideClick);
     };
-  }, [isOpen]);
+  }, [isOpen, onClose]);
 
   return (
     <>
-      {/* Overlay */}
-      {isOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity" />
-      )}
-
-      {/* Sidebar */}
       <div
-        className={`sidebar fixed top-0 left-0 h-full w-64 bg-emerald-800 text-white transform ${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
-        } transition-transform duration-300 ease-in-out z-50`}
+        className={`sidebar fixed top-0.5 left-0 bottom-0.5 rounded-sm w-56 bg-emerald-800 text-white transform ${
+          isOpen ? 'translate-x-0.5' : '-translate-x-full'
+        } transition-transform duration-300 ease-in-out z-50 shadow-lg`}
       >
         {/* Sidebar Header */}
-        <div className="flex items-center justify-between p-4 border-b border-emerald-700">
+        <div className="flex items-center justify-between p-3 border-b rounded border-emerald-700">
           <h2 className="text-xl font-semibold">Menu</h2>
           <button
             onClick={onClose}
-            className="p-2 rounded-md text-emerald-200 hover:text-white hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-colors"
+            className="p-2 rounded-sm text-emerald-200 hover:text-white hover:bg-emerald-700 focus:outline-none transition-colors"
           >
-            <svg
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
+            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
 
         {/* Navigation Menu */}
-        <nav className="mt-8">
-          {menuItems.map((item) => (
-            <a
-              key={item}
-              href={`#${item.toLowerCase().replace('-', '')}`}
-              className="block px-6 py-3 text-emerald-200 hover:text-white hover:bg-emerald-700 transition-colors border-l-4 border-transparent hover:border-emerald-400"
-              onClick={onClose}
+        <nav className="mt-6">
+          {menuItems.map(({ name, path }) => (
+            <Link
+              key={name}
+              href={path}
+              className="block px-6 py-3 text-base font-medium text-emerald-200 hover:text-white hover:bg-emerald-700 transition-colors border-l-4 border-transparent hover:border-emerald-400 rounded-sm"
+              onClick={onClose} // ✅ Close sidebar on link click
             >
-              {item}
-            </a>
+              {name}
+            </Link>
           ))}
         </nav>
       </div>

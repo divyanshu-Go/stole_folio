@@ -18,7 +18,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`text-lg font-[Poppins] min-h-screen w-screen flex flex-col`}
+        className={`text-lg font-[Poppins] min-h-screen flex flex-col`}
       >
         <Header/>
         {children}
