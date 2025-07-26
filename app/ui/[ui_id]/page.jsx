@@ -32,8 +32,8 @@ async function getPortfolioData(portfolioId) {
 
 // Server component that fetches data and renders portfolio
 export default async function PortfolioPageRoute({ params }) {
-  const { portfolio_id } = await params;
-  const container = await getPortfolioData(portfolio_id);
+  const { ui_id } = await params;
+  const container = await getPortfolioData(ui_id);
 
   // Convert Container instance to plain object for client component
   const containerData = container ? container.toJSON() : null;
@@ -45,8 +45,8 @@ export default async function PortfolioPageRoute({ params }) {
 
 // Optional: Generate metadata for SEO
 export async function generateMetadata({ params }) {
-  const { portfolio_id } = await params;
-  const container = await getPortfolioData(portfolio_id);
+  const { ui_id } = await params;
+  const container = await getPortfolioData(ui_id);
 
   return {
     title: container?.name || 'Portfolio',

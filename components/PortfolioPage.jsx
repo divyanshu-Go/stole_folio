@@ -96,6 +96,7 @@ const PortfolioContainer = ({ container }) => {
     style: containerStyle,
     onMouseEnter: handleMouseEnter,
     onMouseLeave: handleMouseLeave,
+    id: container.sectionId || "",
   };
 
   // NEW: Render as anchor tag if it's clickable and has a URL

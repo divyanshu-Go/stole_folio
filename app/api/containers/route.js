@@ -26,6 +26,7 @@ export async function POST(request) {
       return {
         name: container.name || "Container",
         container_Id: container.container_Id,
+        sectionId: container.sectionId,
         type: container.type || "div",
         text: container.text || "Sample Text",
         styles: container.styles || {},

@@ -5,7 +5,7 @@ import Container from '@/models/Container';
 
 export async function GET(request, { params }) {
   try {
-    const { portfolio_id } = params;
+    const { portfolio_id } =await params;
 
     // Validate portfolio_id
     if (!portfolio_id || !ObjectId.isValid(portfolio_id)) {

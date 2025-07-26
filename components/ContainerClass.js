@@ -4,8 +4,9 @@ export default class Container {
   constructor(type = "div") {
     this.name = "New Container";
     this.container_Id = Math.random().toString(36).substr(2, 9);
+    this.sectionId = "";
     this.type = type;
-    this.text = "Text";
+    this.text = "Click me";
     this.children = [null, null, null, null];
 
     // NEW: Link properties
@@ -78,6 +79,7 @@ export default class Container {
   clone() {
     const cloned = new Container(this.type);
     cloned.container_Id = Math.random().toString(36).substr(2, 9);
+    cloned.sectionId = this.sectionId;
     cloned.text = this.text;
     cloned.styles = { ...this.styles };
     cloned.hoverStyles = { ...this.hoverStyles };
@@ -114,6 +116,7 @@ export default class Container {
     return {
       name: this.name,
       container_Id: this.container_Id,
+      sectionId: this.sectionId,
       type: this.type,
       text: this.text,
       styles: this.styles,
@@ -147,6 +150,7 @@ export default class Container {
     const container = new Container(data.type);
     container.name = data.name;
     container.container_Id = data.container_Id;
+    container.sectionId = data.sectionId;
     container.text = data.text;
     container.styles = { ...container.styles, ...data.styles };
     container.hoverStyles = { ...container.hoverStyles, ...data.hoverStyles };

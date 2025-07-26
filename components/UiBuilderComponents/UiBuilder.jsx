@@ -10,6 +10,7 @@ import {
   findContainer,
   serializeContainer,
 } from "@/lib/utils/container";
+import PublishModal from "../PublishModal";
 
 export default function UIBuilder({ initialContainer }) {
   const createDefaultContainer = () => new Container();
@@ -30,6 +31,16 @@ export default function UIBuilder({ initialContainer }) {
     }
     return createDefaultContainer().container_Id;
   });
+
+  const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
+
+  const handleOpenPublishModal = () => {
+    setIsPublishModalOpen(true);
+  };
+
+  const handleClosePublishModal = () => {
+    setIsPublishModalOpen(false);
+  };
 
   const [copiedContainer, setCopiedContainer] = useState(null);
 
@@ -58,6 +69,25 @@ export default function UIBuilder({ initialContainer }) {
             children: newChildren,
           };
         }
+      }
+      return {
+        ...container,
+        children: container.children.map((child) =>
+          child ? update(child) : null
+        ),
+      };
+    };
+    setRootContainer(update(rootContainer));
+  };
+
+  // Update container sectionId
+  const updateContainerSectionId = (container_Id, sectionId) => {
+    const update = (container) => {
+      if (container.container_Id === container_Id) {
+        return {
+          ...container,
+          sectionId: sectionId,
+        };
       }
       return {
         ...container,
@@ -335,11 +365,20 @@ export default function UIBuilder({ initialContainer }) {
                 onToggleClickable={toggleContainerClickable}
                 onImageChange={updateContainerImage}
                 onIconChange={updateContainerIcon}
+                onSectionIdChange={updateContainerSectionId}
+                onOpenPublishModal={handleOpenPublishModal}
               />
             )}
           </div>
         </div>
       </div>
+      <PublishModal
+        isOpen={isPublishModalOpen}
+        onClose={handleClosePublishModal}
+        rootContainer={rootContainer}
+        serializeContainer={serializeContainer}
+        deserializeContainer={deserializeContainer}
+      />
     </div>
   );
 }
