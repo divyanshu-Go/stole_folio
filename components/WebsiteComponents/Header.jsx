@@ -17,7 +17,7 @@ const Header = () => {
   // Define menu items with correct label and path
   const menuItems = [
     { name: 'Home', path: '/' },
-    { name: 'Portfolios', path: '/portfolio' },
+    { name: 'Portfolios', path: '/portfolios' },
     { name: 'UI-Builder', path: '/ui-builder/blank' },
     { name: 'About-us', path: '/about' },
   ];

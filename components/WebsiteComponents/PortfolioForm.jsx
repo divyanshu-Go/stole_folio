@@ -64,7 +64,6 @@ const PortfolioForm = () => {
   setIsSubmitting(true);
 
   // Optional: Show alert and delay for demo effect
-  setTimeout(() => {
     
     // ✅ Build query string from formData
     const query = new URLSearchParams(formData).toString();
@@ -72,7 +71,6 @@ const PortfolioForm = () => {
     // ✅ Redirect to /ui-builder with query
     router.push(`/ui-builder?${query}`);
     setIsSubmitting(false);
-  }, 1500);
 };
 
 

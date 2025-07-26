@@ -20,9 +20,9 @@ export default function RootLayout({ children }) {
       <body
         className={`text-lg font-[Poppins] min-h-screen flex flex-col`}
       >
-        <Header/>
+        {/* <Header/> */}
         {children}
-        <Footer/>
+        {/* <Footer/> */}
       </body>
     </html>
   );
