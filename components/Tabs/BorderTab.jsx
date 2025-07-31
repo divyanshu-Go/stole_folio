@@ -18,7 +18,7 @@ const BorderTab = ({ container, handleStyleChange }) => {
               onClick={() => handleStyleChange("borderWidth", width)}
               className={`px-2 py-1 text-xs rounded ${
                 container.styles.borderWidth === width
-                  ? "bg-blue-500 text-white"
+                  ? "bg-emerald-500 text-white"
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300"
               }`}
             >
@@ -38,7 +38,7 @@ const BorderTab = ({ container, handleStyleChange }) => {
               onClick={() => handleStyleChange("borderStyle", style)}
               className={`px-2 py-1 text-xs rounded ${
                 container.styles.borderStyle === style
-                  ? "bg-blue-500 text-white"
+                  ? "bg-emerald-500 text-white"
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300"
               }`}
             >
@@ -56,7 +56,7 @@ const BorderTab = ({ container, handleStyleChange }) => {
             onClick={() => handleStyleChange("borderColor", "transparent")}
             className={`px-2 py-1 text-xs rounded ${
               container.styles.borderColor === "transparent"
-                ? "bg-blue-500 text-white"
+                ? "bg-emerald-500 text-white"
                 : "bg-gray-200 text-gray-700 hover:bg-gray-300"
             }`}
           >

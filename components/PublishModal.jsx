@@ -105,9 +105,10 @@ const PublishModal = ({
         setPublishStatus("success");
         // Redirect to published portfolio after 2 seconds
         onClose();
-        window.open(result.data.redirectUrl, "_blank");
-
-
+        setTimeout(() => {
+          window.location.href = result.data.redirectUrl;
+        }, 1500);
+        
       } else {
         setPublishStatus("error");
         if (result.error.includes("URL already exists")) {

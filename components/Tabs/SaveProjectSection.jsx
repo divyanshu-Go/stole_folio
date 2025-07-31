@@ -17,7 +17,7 @@ const SaveProjectSection = ({
           placeholder="Project name (optional)"
           value={projectName}
           onChange={(e) => setProjectName(e.target.value)}
-          className="flex-1 px-2 py-1 text-sm border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="flex-1 px-2 py-1 text-sm border rounded focus:outline-none focus:ring-1 focus:ring-emerald-500"
         />
         <button
           onClick={onSave}
@@ -25,7 +25,7 @@ const SaveProjectSection = ({
           className={`px-3 py-1 text-sm rounded font-medium transition-colors ${
             isSaving
               ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-500 hover:bg-blue-600 text-white"
+              : "bg-emerald-600 hover:bg-emerald-700 text-white"
           }`}
         >
           {isSaving ? "Saving..." : "Save"}

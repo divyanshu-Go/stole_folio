@@ -43,7 +43,7 @@ export const FlexDirectionToggle = ({ value, onChange }) => {
           onClick={() => onChange(option.value)}
           title={option.label}
           className={`p-2 rounded border ${value === option.value
-            ? "bg-blue-500 text-white border-blue-600"
+            ? "bg-emerald-500 text-white border-emerald-600"
             : "bg-gray-100 text-gray-700 hover:bg-gray-200 border-gray-300"
             }`}
         >
@@ -78,7 +78,7 @@ export const JustifyContentSelector = ({ value, direction = "row", onChange }) =
             onClick={() => onChange(option.value)}
             title={option.value}
             className={`rounded border p-1 ${isSelected
-                ? "border-blue-500 bg-blue-500"
+                ? "border-emerald-500 bg-emerald-500"
                 : "border-dashed border-gray-300 bg-gray-100 hover:bg-gray-200"
               }`}
           >
@@ -123,7 +123,7 @@ export const AlignItemsSelector = ({ value, direction = "row", onChange }) => {
             onClick={() => onChange(option.value)}
             title={option.value}
             className={`rounded border p-1 ${isSelected
-                ? "bg-blue-500 border-blue-500"
+                ? "bg-emerald-500 border-emerald-500"
                 : "bg-gray-100 border-dashed border-gray-300 hover:bg-gray-200"
               }`}
           >
@@ -196,7 +196,7 @@ export const SizeSelector = ({ label, value, onChange }) => {
               key={preset}
               onClick={() => handlePresetClick(preset)}
               className={`px-2 py-1 text-xs rounded ${value === `${preset}%`
-                  ? "bg-blue-500 text-white"
+                  ? "bg-emerald-500 text-white"
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                 }`}
             >
@@ -230,7 +230,7 @@ export const PaddingSelector = ({ value, onChange }) => {
           key={option}
           onClick={() => onChange(option)}
           className={`px-2 py-1 text-xs rounded ${value === option
-            ? "bg-blue-500 text-white"
+            ? "bg-emerald-500 text-white"
             : "bg-gray-200 text-gray-700 hover:bg-gray-300"
             }`}
         >
@@ -254,7 +254,7 @@ export const MarginSelector = ({ value, onChange }) => {
           onClick={() => onChange(option)}
           className={`px-2 py-1 text-xs rounded ${
             value === option
-              ? "bg-blue-500 text-white"
+              ? "bg-emerald-500 text-white"
               : "bg-gray-200 text-gray-700 hover:bg-gray-300"
           }`}
         >
@@ -277,7 +277,7 @@ export const GapSelector = ({ value, onChange }) => {
           onClick={() => onChange(option)}
           className={`px-2 py-1 text-xs rounded ${
             value === option
-              ? "bg-blue-500 text-white"
+              ? "bg-emerald-500 text-white"
               : "bg-gray-200 text-gray-700 hover:bg-gray-300"
           }`}
         >
@@ -303,7 +303,7 @@ export const TextAlignSelector = ({ value, onChange }) => {
           onClick={() => onChange(option)}
           className={`px-2 py-1 text-xs rounded ${
             value === option
-              ? "bg-blue-500 text-white"
+              ? "bg-emerald-500 text-white"
               : "bg-gray-200 text-gray-700 hover:bg-gray-300"
           }`}
         >
@@ -337,7 +337,7 @@ export const FontSizeSelector = ({ value, onChange }) => {
           key={option.value}
           onClick={() => onChange(option.value)}
           className={`px-2 py-1 text-xs rounded ${value === option.value
-            ? "bg-blue-500 text-white"
+            ? "bg-emerald-500 text-white"
             : "bg-gray-200 text-gray-700 hover:bg-gray-300"
             }`}
         >
@@ -368,7 +368,7 @@ export const FontWeightSelector = ({ value, onChange }) => {
           key={option.value}
           onClick={() => onChange(option.value)}
           className={`px-2 py-1 text-xs rounded ${value === option.value
-            ? "bg-blue-500 text-white"
+            ? "bg-emerald-500 text-white"
             : "bg-gray-200 text-gray-700 hover:bg-gray-300"
             }`}
         >
@@ -398,7 +398,7 @@ export const BorderWidthSelector = ({ value, onChange, borderColor }) => {
           key={option}
           onClick={() => handleChange(option)}
           className={`px-2 py-1 text-xs rounded ${currentWidth === option
-            ? "bg-blue-500 text-white"
+            ? "bg-emerald-500 text-white"
             : "bg-gray-200 text-gray-700 hover:bg-gray-300"
             }`}
         >
@@ -427,7 +427,7 @@ export const BorderRadiusSelector = ({ value, onChange }) => {
           key={option.value}
           onClick={() => onChange(option.value)}
           className={`px-2 py-1 text-xs rounded ${value === option.value
-            ? "bg-blue-500 text-white"
+            ? "bg-emerald-500 text-white"
             : "bg-gray-200 text-gray-700 hover:bg-gray-300"
             }`}
         >
@@ -454,7 +454,7 @@ export const BoxShadowSelector = ({ value, onChange }) => {
           key={option.value}
           onClick={() => onChange(option.value)}
           className={`px-2 py-1 text-xs rounded ${value === option.value
-            ? "bg-blue-500 text-white"
+            ? "bg-emerald-500 text-white"
             : "bg-gray-200 text-gray-700 hover:bg-gray-300"
             }`}
         >

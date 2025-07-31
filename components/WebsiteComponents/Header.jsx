@@ -14,7 +14,6 @@ const Header = () => {
     setIsSidebarOpen(false);
   };
 
-  // Define menu items with correct label and path
   const menuItems = [
     { name: 'Home', path: '/' },
     { name: 'Portfolios', path: '/portfolios' },
@@ -52,8 +51,11 @@ const Header = () => {
             </nav>
 
             {/* Logo - Right */}
-            <div className="bg-emerald-700 px-3 py-2 rounded-sm">
-              <span className="text-white font-bold text-lg">LOGO</span>
+            <div className="px-3 py-2 rounded-sm">
+              <span className="flex items-center gap-3">
+                <img src="Logo.ico" alt="Logo" width={25} />
+                <p className="font-bold text-lg text-emerald-300">Stole Folio</p>
+              </span>
             </div>
           </div>
         </div>

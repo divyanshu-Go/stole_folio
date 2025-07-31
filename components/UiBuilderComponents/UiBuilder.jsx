@@ -323,15 +323,15 @@ export default function UIBuilder({ initialContainer }) {
   const isRootSelected = selectedContainerId === rootContainer.container_Id;
 
   return (
-    <div className="min-h-screen bg-gray-100 p-3 ">
-      <div className="max-w-7xl mx-auto ">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
+    <div className="min-h-screen bg-emerald-50 p-3">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Preview Section */}
-          <div className="flex flex-col bg-white rounded h-[60vh] md:h-[90vh] ">
-            <h2 className="text-lg text-white font-bold mb-4 py-1 rounded-t text-center bg-blue-500">
+          <div className="flex flex-col bg-white rounded h-[60vh] md:h-[90vh]">
+            <h2 className="text-lg text-white font-bold  py-1 rounded-t text-center bg-emerald-600">
               Preview
             </h2>
-            <div className="flex-1 border border-dashed border-gray-400 py-4 px-2 overflow-y-auto min-h-0 bg-gray-50 ">
+            <div className="flex-1 border border-dashed border-emerald-300 py-4 px-2 overflow-y-auto min-h-0 bg-zinc-50">
               <PreviewContainer
                 container={rootContainer}
                 selectedContainerId={selectedContainerId}
@@ -342,7 +342,7 @@ export default function UIBuilder({ initialContainer }) {
 
           {/* Controller Section */}
           <div className="flex flex-col bg-white rounded">
-            <h2 className="text-lg text-white font-bold mb-4 py-1 rounded-t text-center bg-blue-500">
+            <h2 className="text-lg text-white font-bold mb-4 py-1 rounded-t text-center bg-emerald-600">
               Controls
             </h2>
             {selectedContainer && (

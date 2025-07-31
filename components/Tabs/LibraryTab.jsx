@@ -88,7 +88,7 @@ const LibraryTab = ({ selectedContainerId, onAddLibraryComponent }) => {
                             key={item.id}
                             onClick={() => handleLibraryItemClick(item)}
                             className={`cursor-pointer transition-all duration-200 mx-auto p-1 ${selectedLibraryItem?.id === item.id
-                                ? "ring-2 ring-blue-500 bg-blue-50 rounded-xs"
+                                ? "ring-2 ring-emerald-500 bg-emerald-50 rounded-xs"
                                 : "hover:bg-gray-50"
                                 }`}
                         >
@@ -106,7 +106,7 @@ const LibraryTab = ({ selectedContainerId, onAddLibraryComponent }) => {
                 onClick={handleAddToContainer}
                 disabled={!selectedLibraryItem || !selectedContainerId}
                 className={`w-full px-3 py-3 text-xs rounded transition-colors ${selectedLibraryItem && selectedContainerId
-                    ? "bg-blue-500 text-white hover:bg-blue-600"
+                    ? "bg-emerald-500 text-white hover:bg-emerald-600"
                     : "bg-gray-300 text-gray-500 cursor-not-allowed"
                     }`}
             >

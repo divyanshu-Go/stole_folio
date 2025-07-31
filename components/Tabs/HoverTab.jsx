@@ -9,7 +9,7 @@ const ColorInput = ({ label, property, value, onchange, defaultColor }) => (
       <button
         onClick={() => onchange(property, "transparent")}
         className={`px-2 py-1 text-xs rounded ${value === "transparent"
-            ? "bg-blue-500 text-white"
+            ? "bg-emerald-500 text-white"
             : "bg-gray-200 text-gray-700 hover:bg-gray-300"
           }`}
       >
@@ -66,7 +66,7 @@ const HoverTab = ({ container, handleHoverChange }) => {
           onChange={(e) =>
             handleHoverChange("opacity", e.target.value)
           }
-          className="w-full"
+          className="w-full accent-emerald-500"
         />
       </div>
 
@@ -83,7 +83,7 @@ const HoverTab = ({ container, handleHoverChange }) => {
           onChange={(e) =>
             handleHoverChange("scale", e.target.value)
           }
-          className="w-full"
+          className="w-full accent-emerald-500"
         />
       </div>
 
@@ -101,7 +101,7 @@ const HoverTab = ({ container, handleHoverChange }) => {
               key={option.value}
               onClick={() => handleHoverChange("boxShadow", option.value)}
               className={`px-2 py-1 text-xs rounded ${container.hoverStyles?.boxShadow === option.value
-                  ? "bg-blue-500 text-white"
+                  ? "bg-emerald-500 text-white"
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                 }`}
             >

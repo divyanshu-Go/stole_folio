@@ -114,7 +114,7 @@ const StyleController = ({
   };
 
   return (
-    <div className="p-3 bg-gray-50 rounded-lg">
+    <div className="p-3 bg-zinc-50 rounded-lg">
       <SaveProjectSection
         isSaving={isSaving}
         saveStatus={saveStatus}
@@ -122,10 +122,10 @@ const StyleController = ({
         projectName={projectName}
         setProjectName={setProjectName}
       />
-      <div className="mb-4 p-3 bg-white rounded border">
+      <div className="mb-4 p-3 bg-white rounded border border-emerald-200">
         <button
           onClick={onOpenPublishModal}
-          className="w-full bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition-colors flex items-center justify-center gap-2"
+          className="w-full bg-emerald-600 text-white py-2 px-4 rounded hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2"
         >
           <svg
             className="w-4 h-4"
@@ -155,7 +155,6 @@ const StyleController = ({
         {activeTab === "Color" && <ColorTab {...tabProps} />}
         {activeTab === "Border" && <BorderTab {...tabProps} />}
         {activeTab === "Hover" && <HoverTab {...tabProps} />}
-        {/* NEW: Add the Link tab */}
         {activeTab === "Link" && (
           <LinkTab
             container={container}

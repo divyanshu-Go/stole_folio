@@ -18,7 +18,7 @@ const ImageModeSelector = ({ value, onChange }) => {
           onClick={() => onChange(option.value)}
           className={`px-2 py-1 text-xs rounded flex items-center gap-1 ${
             value === option.value
-              ? "bg-blue-500 text-white"
+              ? "bg-emerald-500 text-white"
               : "bg-gray-200 text-gray-700 hover:bg-gray-300"
           }`}
         >
@@ -46,7 +46,7 @@ const ImageSizeSelector = ({ value, onChange }) => {
           onClick={() => onChange(option.value)}
           className={`px-2 py-1 text-xs rounded ${
             value === option.value
-              ? "bg-blue-500 text-white"
+              ? "bg-emerald-500 text-white"
               : "bg-gray-200 text-gray-700 hover:bg-gray-300"
           }`}
         >
@@ -75,7 +75,7 @@ const ImagePositionSelector = ({ value, onChange }) => {
           onClick={() => onChange(option.value)}
           className={`px-2 py-1 text-xs rounded ${
             value === option.value
-              ? "bg-blue-500 text-white"
+              ? "bg-emerald-500 text-white"
               : "bg-gray-200 text-gray-700 hover:bg-gray-300"
           }`}
         >
@@ -103,7 +103,7 @@ const ImageRepeatSelector = ({ value, onChange }) => {
           onClick={() => onChange(option.value)}
           className={`px-2 py-1 text-xs rounded ${
             value === option.value
-              ? "bg-blue-500 text-white"
+              ? "bg-emerald-500 text-white"
               : "bg-gray-200 text-gray-700 hover:bg-gray-300"
           }`}
         >

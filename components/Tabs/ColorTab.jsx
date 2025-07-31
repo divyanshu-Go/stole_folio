@@ -9,7 +9,7 @@ const ColorInput = ({ label, property, value, onChange }) => (
         onClick={() => onChange(property, "transparent")}
         className={`px-2 py-1 text-xs rounded ${
           value === "transparent"
-            ? "bg-blue-500 text-white"
+            ? "bg-emerald-500 text-white"
             : "bg-gray-200 text-gray-700 hover:bg-gray-300"
         }`}
       >

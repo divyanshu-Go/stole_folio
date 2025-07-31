@@ -15,7 +15,7 @@ const PortfolioCard = ({ portfolio }) => {
     });
 
   return (
-    <div className="rounded-lg shadow-md overflow-hidden border border-green-200 hover:shadow-lg transition-shadow">
+    <div className=" w-full lg:w-[600px] md:w-[400px] rounded-md shadow-md overflow-hidden border border-green-200 hover:shadow-lg transition-shadow">
       {/* Iframe */}
       <div className="relative bg-gray-100">
         {!iframeLoaded && (
@@ -32,7 +32,7 @@ const PortfolioCard = ({ portfolio }) => {
           style={{
             transform: "scale(0.8)",
             transformOrigin: "top left",
-            width: "127.8%",
+            width: "125%",
             height: "375px",
             pointerEvents: "none",
             overflow: "hidden",
@@ -43,7 +43,7 @@ const PortfolioCard = ({ portfolio }) => {
       </div>
 
       {/* Info */}
-      <div className="p-6 bg-zinc-50 -mt-20 z-50 relative">
+      <div className="p-6 bg-zinc-50 -mt-20  relative">
         <div className="mb-4">
           <h3 className="text-xl font-bold text-gray-800 mb-2">{portfolio.title}</h3>
           <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">

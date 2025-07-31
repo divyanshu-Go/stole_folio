@@ -18,7 +18,7 @@ const LinkTargetSelector = ({ value, onChange }) => {
           onClick={() => onChange(option.value)}
           className={`px-2 py-1 text-xs rounded ${
             value === option.value
-              ? "bg-blue-500 text-white"
+              ? "bg-emerald-500 text-white"
               : "bg-gray-200 text-gray-700 hover:bg-gray-300"
           }`}
         >
@@ -131,17 +131,17 @@ const LinkTab = ({
 
       {/* Link Status Indicator */}
       {container.isClickable && (
-        <div className="text-xs p-2 rounded bg-blue-50 border border-blue-200">
+        <div className="text-xs p-2 rounded bg-emerald-50 border border-emerald-200">
           <div className="flex items-center gap-1">
-            <span className="text-blue-600">🔗</span>
-            <span className="font-medium text-blue-800">Link Status:</span>
+            <span className="text-emerald-600">🔗</span>
+            <span className="font-medium text-emerald-800">Link Status:</span>
           </div>
           {container.linkUrl ? (
-            <div className="mt-1 text-blue-700">
+            <div className="mt-1 text-emerald-700">
               {isValidUrl ? "✓ Ready to use" : "⚠ URL needs to be fixed"}
             </div>
           ) : (
-            <div className="mt-1 text-blue-700">Enter a URL to activate</div>
+            <div className="mt-1 text-emerald-700">Enter a URL to activate</div>
           )}
         </div>
       )}

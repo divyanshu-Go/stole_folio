@@ -54,7 +54,7 @@ export default async function PortfolioGalleryPage() {
             <p className="text-gray-500">Be the first to publish a portfolio!</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-20 gap-y-24  place-items-center ">
             {portfolios.map((portfolio) => (
               <PortfolioCard key={portfolio._id} portfolio={portfolio} />
             ))}

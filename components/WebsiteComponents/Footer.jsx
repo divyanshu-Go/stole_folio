@@ -13,12 +13,16 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="md:col-span-2">
             <div className="flex items-center mb-4">
-              <div className="bg-emerald-700 px-3 py-2 rounded-lg mr-3">
-                <span className="text-white font-bold text-lg">LOGO</span>
+              <div className=" px-3 py-2 rounded-lg mr-3">
+                  <span className="flex items-center gap-3">
+                    <img src="Logo.ico" alt="Logo" width={25} />
+                    <p className="font-bold text-xl text-emerald-100">
+                      Stole Folio
+                    </p>
+                  </span>
               </div>
-              <span className="text-xl font-semibold">Portfolio Builder</span>
             </div>
-            <p className="text-emerald-200 text-sm leading-relaxed">
+            <p className="text-emerald-300 text-sm leading-relaxed">
               Create stunning, professional portfolios in minutes. Join
               thousands of creators who trust our platform to showcase their
               work and land their dream opportunities.
@@ -27,7 +31,9 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            <h3 className="text-lg font-semibold mb-4 text-emerald-100">
+              Quick Links
+            </h3>
             <ul className="space-y-2">
               <li>
                 <Link
@@ -97,7 +103,7 @@ const Footer = () => {
             </div>
 
             {/* Copyright */}
-            <p className="text-emerald-200 text-sm text-center md:text-right">
+            <p className="text-emerald-300 text-sm text-center md:text-right">
               &copy; {currentYear} Portfolio Builder. All rights reserved.
             </p>
           </div>

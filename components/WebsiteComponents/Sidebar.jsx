@@ -1,9 +1,9 @@
 'use client';
 import { useEffect } from 'react';
-import Link from 'next/link'; // ✅ Import Next.js Link
+import Link from 'next/link';
 
 const Sidebar = ({ isOpen, onClose, menuItems }) => {
-  
+
   // Close sidebar when clicking outside
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -29,8 +29,8 @@ const Sidebar = ({ isOpen, onClose, menuItems }) => {
         } transition-transform duration-300 ease-in-out z-50 shadow-lg`}
       >
         {/* Sidebar Header */}
-        <div className="flex items-center justify-between p-3 border-b rounded border-emerald-700">
-          <h2 className="text-xl font-semibold">Menu</h2>
+        <div className="flex items-center justify-between px-4 py-3 border-b border-emerald-700 rounded-sm">
+          <h2 className="px- text-xl font-semibold text-white">Menu</h2>
           <button
             onClick={onClose}
             className="p-2 rounded-sm text-emerald-200 hover:text-white hover:bg-emerald-700 focus:outline-none transition-colors"
@@ -47,8 +47,8 @@ const Sidebar = ({ isOpen, onClose, menuItems }) => {
             <Link
               key={name}
               href={path}
-              className="block px-6 py-3 text-base font-medium text-emerald-200 hover:text-white hover:bg-emerald-700 transition-colors border-l-4 border-transparent hover:border-emerald-400 rounded-sm"
-              onClick={onClose} // ✅ Close sidebar on link click
+              className="block px-4 py-3 text-sm font-medium text-emerald-200 hover:text-white hover:bg-emerald-700 transition-colors border-l-4 border-transparent hover:border-emerald-400 rounded-sm"
+              onClick={onClose}
             >
               {name}
             </Link>

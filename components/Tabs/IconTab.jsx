@@ -20,7 +20,7 @@ const IconSizeSelector = ({ value, onChange }) => {
           onClick={() => onChange(option.value)}
           className={`px-2 py-1 text-xs rounded ${
             value === option.value
-              ? "bg-blue-500 text-white"
+              ? "bg-emerald-500 text-white"
               : "bg-gray-200 text-gray-700 hover:bg-gray-300"
           }`}
         >
@@ -40,7 +40,7 @@ const IconColorInput = ({ label, property, value, onChange }) => (
         onClick={() => onChange(property, "transparent")}
         className={`px-2 py-1 text-xs rounded ${
           value === "transparent"
-            ? "bg-blue-500 text-white"
+            ? "bg-emerald-500 text-white"
             : "bg-gray-200 text-gray-700 hover:bg-gray-300"
         }`}
       >
@@ -112,7 +112,7 @@ const IconTab = ({ container, handleIconChange }) => {
           onClick={() => handleIconChange("hasIcon", !hasIcon)}
           className={`px-3 py-1 text-xs rounded flex items-center gap-1 ${
             hasIcon
-              ? "bg-green-500 text-white"
+              ? "bg-emerald-500 text-white"
               : "bg-gray-200 text-gray-700 hover:bg-gray-300"
           }`}
         >
@@ -156,7 +156,7 @@ const IconTab = ({ container, handleIconChange }) => {
               onClick={() => handleQuickSelect(iconName)}
               className={`p-1 text-xs rounded border hover:bg-gray-100 ${
                 container.iconName === iconName
-                  ? "border-blue-500 bg-blue-50"
+                  ? "border-emerald-500 bg-emerald-100"
                   : "border-gray-300"
               }`}
               disabled={!hasIcon}
@@ -187,44 +187,7 @@ const IconTab = ({ container, handleIconChange }) => {
         />
       </div>
 
-      {/* Icon Status Indicator */}
-      {hasIcon && (
-        <div className="text-xs p-2 rounded bg-purple-50 border border-purple-200">
-          <div className="flex items-center gap-1">
-            <span className="text-purple-600">🎯</span>
-            <span className="font-medium text-purple-800">Icon Status:</span>
-          </div>
-          <div className="mt-1 text-purple-700">
-            <div>Name: {container.iconName || "None"}</div>
-            {container.iconName ? (
-              <div className="mt-1">
-                {isValidIconName
-                  ? "✓ Icon will display"
-                  : "⚠ Invalid icon name"}
-              </div>
-            ) : (
-              <div className="mt-1">Enter an icon name to display</div>
-            )}
-            <div className="mt-1">Size: {container.iconSize}px</div>
-            <div>Color: {container.iconColor}</div>
-          </div>
-        </div>
-      )}
-
-      {/* Help Text */}
-      {!hasIcon && (
-        <div className="text-xs p-2 rounded bg-gray-50 border border-gray-200">
-          <div className="flex items-center gap-1">
-            <span className="text-gray-600">💡</span>
-            <span className="font-medium text-gray-800">Icon Feature:</span>
-          </div>
-          <div className="mt-1 text-gray-700">
-            <div>• Icons replace text when enabled</div>
-            <div>• Uses Lucide React icon library</div>
-            <div>• Fallback icon shows for invalid names</div>
-          </div>
-        </div>
-      )}
+      
     </div>
   );
 };

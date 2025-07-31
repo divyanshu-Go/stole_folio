@@ -10,7 +10,7 @@ const TabNavigation = ({ tabs, activeTab, setActiveTab }) => {
           onClick={() => setActiveTab(tab)}
           className={`flex-1 px-3 py-1 text-xs rounded ${
             activeTab === tab
-              ? "bg-blue-500 text-white"
+              ? "bg-emerald-600 text-white"
               : "bg-gray-200 text-gray-700 hover:bg-gray-300"
           }`}
         >
