@@ -7,7 +7,7 @@ const SmallPreviewContainer = ({ container, maxWidth = "180px", maxHeight = "100
   if (!container) {
     return (
       <div 
-        className="border border-gray-200 rounded bg-gray-50 flex items-center justify-center text-gray-400 text-xs"
+        className="border border-neutral-200 rounded-lg bg-neutral-50 shadow-sm flex items-center justify-center text-neutral-400 text-xs italic"
         style={{ width: maxWidth, height: maxHeight }}
       >
         No Preview
@@ -15,14 +15,13 @@ const SmallPreviewContainer = ({ container, maxWidth = "180px", maxHeight = "100
     );
   }
 
-  // Create a simplified wrapper that constrains the preview
   const wrapperStyle = {
     width: maxWidth,
     height: maxHeight,
     overflow: "hidden",
     position: "relative",
     border: "1px solid #e5e7eb",
-    borderRadius: "4px",
+    borderRadius: "8px",
     backgroundColor: "#ffffff",
     display: "flex",
     alignItems: "center",
@@ -32,10 +31,10 @@ const SmallPreviewContainer = ({ container, maxWidth = "180px", maxHeight = "100
   return (
     <div style={wrapperStyle}>
       <div style={{ 
-        transform: "scale(0.6)", 
+        transform: "scale(0.8, 0.6)", 
         transformOrigin: "center center",
-        width: "150%", // Compensate for scale
-        height: "150%", // Compensate for scale
+        width: "133%",
+        height: "133%",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -45,6 +44,7 @@ const SmallPreviewContainer = ({ container, maxWidth = "180px", maxHeight = "100
     </div>
   );
 };
+
 
 // Recursive component to render container elements without interactions
 const PreviewElement = ({ container }) => {

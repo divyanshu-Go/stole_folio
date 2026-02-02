@@ -1,5 +1,5 @@
 import PortfolioPage from '@/components/PortfolioPage';
-import Container from '@/components/ContainerClass';
+import Container from '@/lib/utils/ContainerClass';
 import { convertToPlainObject } from '@/lib/utils/container';
 
 

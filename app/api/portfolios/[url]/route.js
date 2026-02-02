@@ -38,11 +38,12 @@ export async function GET(request, { params }) {
     }
 
     return NextResponse.json(
-      {
+      { 
         success: true,
         data: {
           portfolio: {
-            author: portfolio.author,
+            _id: portfolio._id,
+            author: portfolio.author || "Auth",
             title: portfolio.title,
             url: portfolio.url,
             description: portfolio.description,

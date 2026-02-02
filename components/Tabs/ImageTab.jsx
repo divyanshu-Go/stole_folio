@@ -1,13 +1,26 @@
 "use client";
 
 import React from "react";
+import {
+  Ban,
+  Image as ImageIcon,
+  PictureInPicture,
+  HelpCircle,
+  AlertTriangle,
+  CheckCircle,
+  Upload,
+} from "lucide-react";
 
 // Image Mode Selector component
 const ImageModeSelector = ({ value, onChange }) => {
   const options = [
-    { value: "none", label: "No Image", icon: "🚫" },
-    { value: "background", label: "Background", icon: "🖼️" },
-    { value: "img", label: "Image Element", icon: "🏞️" },
+    { value: "none", label: "No Image", icon: <Ban size={14} /> },
+    {
+      value: "background",
+      label: "Background",
+      icon: <PictureInPicture size={14} />,
+    },
+    { value: "img", label: "Image Element", icon: <ImageIcon size={14} /> },
   ];
 
   return (
@@ -16,13 +29,13 @@ const ImageModeSelector = ({ value, onChange }) => {
         <button
           key={option.value}
           onClick={() => onChange(option.value)}
-          className={`px-2 py-1 text-xs rounded flex items-center gap-1 ${
+          className={`px-2 py-1 text-xs rounded-sm flex items-center gap-1 ${
             value === option.value
-              ? "bg-emerald-500 text-white"
-              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              ? "bg-neutral-700 text-neutral-50"
+              : "bg-neutral-200 text-neutral-600 hover:bg-neutral-300"
           }`}
         >
-          <span>{option.icon}</span>
+          {option.icon}
           {option.label}
         </button>
       ))}
@@ -30,7 +43,7 @@ const ImageModeSelector = ({ value, onChange }) => {
   );
 };
 
-// Image Size Selector component
+// Image Size Selector
 const ImageSizeSelector = ({ value, onChange }) => {
   const options = [
     { value: "cover", label: "Cover" },
@@ -44,10 +57,10 @@ const ImageSizeSelector = ({ value, onChange }) => {
         <button
           key={option.value}
           onClick={() => onChange(option.value)}
-          className={`px-2 py-1 text-xs rounded ${
+          className={`px-2 py-1 text-xs rounded-sm ${
             value === option.value
-              ? "bg-emerald-500 text-white"
-              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              ? "bg-neutral-700 text-neutral-50"
+              : "bg-neutral-200 text-neutral-600 hover:bg-neutral-300"
           }`}
         >
           {option.label}
@@ -57,36 +70,30 @@ const ImageSizeSelector = ({ value, onChange }) => {
   );
 };
 
-// Image Position Selector component (for background images)
+// Image Position Selector
 const ImagePositionSelector = ({ value, onChange }) => {
-  const options = [
-    { value: "center", label: "Center" },
-    { value: "top", label: "Top" },
-    { value: "bottom", label: "Bottom" },
-    { value: "left", label: "Left" },
-    { value: "right", label: "Right" },
-  ];
+  const options = ["center", "top", "bottom", "left", "right"];
 
   return (
     <div className="flex gap-1 flex-wrap">
       {options.map((option) => (
         <button
-          key={option.value}
-          onClick={() => onChange(option.value)}
-          className={`px-2 py-1 text-xs rounded ${
-            value === option.value
-              ? "bg-emerald-500 text-white"
-              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+          key={option}
+          onClick={() => onChange(option)}
+          className={`px-2 py-1 text-xs rounded-sm ${
+            value === option
+              ? "bg-neutral-700 text-neutral-50"
+              : "bg-neutral-200 text-neutral-600 hover:bg-neutral-300"
           }`}
         >
-          {option.label}
+          {option}
         </button>
       ))}
     </div>
   );
 };
 
-// Image Repeat Selector component (for background images)
+// Image Repeat Selector
 const ImageRepeatSelector = ({ value, onChange }) => {
   const options = [
     { value: "no-repeat", label: "No Repeat" },
@@ -101,10 +108,10 @@ const ImageRepeatSelector = ({ value, onChange }) => {
         <button
           key={option.value}
           onClick={() => onChange(option.value)}
-          className={`px-2 py-1 text-xs rounded ${
+          className={`px-2 py-1 text-xs rounded-sm ${
             value === option.value
-              ? "bg-emerald-500 text-white"
-              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              ? "bg-neutral-700 text-neutral-50"
+              : "bg-neutral-200 text-neutral-600 hover:bg-neutral-300"
           }`}
         >
           {option.label}
@@ -116,9 +123,9 @@ const ImageRepeatSelector = ({ value, onChange }) => {
 
 const ImageTab = ({ container, handleImageChange }) => {
   const validateImageUrl = (url) => {
-    if (!url) return true; // Empty is valid
+    if (!url) return true;
     try {
-      new URL(url.startsWith('http') ? url : `https://${url}`);
+      new URL(url.startsWith("http") ? url : `https://${url}`);
       return true;
     } catch {
       return false;
@@ -130,25 +137,29 @@ const ImageTab = ({ container, handleImageChange }) => {
 
   const handleTestImage = () => {
     if (container.imageUrl && isValidImageUrl) {
-      const url = container.imageUrl.startsWith('http') ? container.imageUrl : `https://${container.imageUrl}`;
-      window.open(url, '_blank', 'noopener,noreferrer');
+      const url = container.imageUrl.startsWith("http")
+        ? container.imageUrl
+        : `https://${container.imageUrl}`;
+      window.open(url, "_blank", "noopener,noreferrer");
     }
   };
 
   return (
     <div className="space-y-3">
-      {/* Image Mode Selection */}
+      {/* Image Mode */}
       <div>
-        <label className="block text-xs font-medium mb-1">Image Mode</label>
+        <label className="block text-xs font-medium mb-1 text-neutral-700">
+          Image Mode
+        </label>
         <ImageModeSelector
           value={container.imageMode}
           onChange={(value) => handleImageChange("imageMode", value)}
         />
       </div>
 
-      {/* Image URL Input */}
+      {/* Image URL */}
       <div className={hasImage ? "" : "opacity-50 pointer-events-none"}>
-        <label className="block text-xs font-medium mb-1">
+        <label className="block text-xs font-medium mb-1 text-neutral-700">
           Image URL
           {!isValidImageUrl && container.imageUrl && (
             <span className="text-red-500 ml-1">• Invalid URL</span>
@@ -158,27 +169,29 @@ const ImageTab = ({ container, handleImageChange }) => {
           type="text"
           value={container.imageUrl}
           onChange={(e) => handleImageChange("imageUrl", e.target.value)}
-          className={`w-full p-1 border rounded text-xs ${
-            !isValidImageUrl && container.imageUrl 
-              ? "border-red-300 bg-red-50" 
-              : "border-gray-300"
+          className={`w-full p-1 border rounded-sm text-xs ${
+            !isValidImageUrl && container.imageUrl
+              ? "border-red-300 bg-red-50"
+              : "border-neutral-300 focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500"
           }`}
           placeholder="https://example.com/image.jpg"
           disabled={!hasImage}
         />
-        <p className="text-xs text-gray-500 mt-1">
+        <p className="text-xs text-neutral-500 mt-1">
           JPG, PNG, GIF, SVG, WebP supported
         </p>
       </div>
 
       {/* Alt Text */}
       <div className={hasImage ? "" : "opacity-50 pointer-events-none"}>
-        <label className="block text-xs font-medium mb-1">Alt Text (Accessibility)</label>
+        <label className="block text-xs font-medium mb-1 text-neutral-700">
+          Alt Text (Accessibility)
+        </label>
         <input
           type="text"
           value={container.imageAlt}
           onChange={(e) => handleImageChange("imageAlt", e.target.value)}
-          className="w-full p-1 border rounded text-xs"
+          className="w-full p-1 border rounded-sm text-xs border-neutral-300 focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500"
           placeholder="Describe the image..."
           disabled={!hasImage}
         />
@@ -186,18 +199,22 @@ const ImageTab = ({ container, handleImageChange }) => {
 
       {/* Image Size */}
       <div className={hasImage ? "" : "opacity-50 pointer-events-none"}>
-        <label className="block text-xs font-medium mb-1">Image Size</label>
+        <label className="block text-xs font-medium mb-1 text-neutral-700">
+          Image Size
+        </label>
         <ImageSizeSelector
           value={container.imageSize}
           onChange={(value) => handleImageChange("imageSize", value)}
         />
       </div>
 
-      {/* Background Image Specific Options */}
+      {/* Background Options */}
       {container.imageMode === "background" && (
         <>
           <div>
-            <label className="block text-xs font-medium mb-1">Position</label>
+            <label className="block text-xs font-medium mb-1 text-neutral-700">
+              Position
+            </label>
             <ImagePositionSelector
               value={container.imagePosition}
               onChange={(value) => handleImageChange("imagePosition", value)}
@@ -205,7 +222,9 @@ const ImageTab = ({ container, handleImageChange }) => {
           </div>
 
           <div>
-            <label className="block text-xs font-medium mb-1">Repeat</label>
+            <label className="block text-xs font-medium mb-1 text-neutral-700">
+              Repeat
+            </label>
             <ImageRepeatSelector
               value={container.imageRepeat}
               onChange={(value) => handleImageChange("imageRepeat", value)}
@@ -219,45 +238,58 @@ const ImageTab = ({ container, handleImageChange }) => {
         <div>
           <button
             onClick={handleTestImage}
-            className="w-full px-3 py-1 bg-green-500 text-white text-xs rounded hover:bg-green-600 transition-colors"
+            className="w-full px-3 py-1 bg-neutral-700 text-neutral-50 text-xs rounded-sm hover:bg-neutral-800 transition-colors flex items-center justify-center gap-1"
           >
-            🖼️ Preview Image
+            <ImageIcon size={14} /> Preview Image
           </button>
         </div>
       )}
 
-      {/* Image Status Indicator */}
+      {/* Image Status */}
       {hasImage && (
-        <div className="text-xs p-2 rounded bg-purple-50 border border-purple-200">
+        <div className="text-xs p-2 rounded-sm bg-neutral-200 border border-neutral-300">
           <div className="flex items-center gap-1">
-            <span className="text-purple-600">
-              {container.imageMode === "background" ? "🖼️" : "🏞️"}
-            </span>
-            <span className="font-medium text-purple-800">Image Status:</span>
+            <ImageIcon size={14} className="text-neutral-600" />
+            <span className="font-medium text-neutral-800">Image Status:</span>
           </div>
-          <div className="mt-1 text-purple-700">
-            <div>Mode: {container.imageMode === "background" ? "Background Image" : "Image Element"}</div>
-            {container.imageUrl ? (
-              <div className="mt-1">
-                {isValidImageUrl ? "✓ Image ready to display" : "⚠ URL needs to be fixed"}
-              </div>
-            ) : (
-              <div className="mt-1">Enter an image URL to display</div>
-            )}
-          </div>
+
+          {container.imageUrl ? (
+            <div className="mt-1 text-neutral-700 flex items-center gap-1">
+              {isValidImageUrl ? (
+                <>
+                  <CheckCircle size={14} className="text-green-600" />
+                  <span>Image ready</span>
+                </>
+              ) : (
+                <>
+                  <AlertTriangle size={14} className="text-yellow-600" />
+                  <span>Invalid image URL</span>
+                </>
+              )}
+            </div>
+          ) : (
+            <div className="mt-1 text-neutral-700 flex items-center gap-1">
+              <Upload size={14} className="text-neutral-500" />
+              <span>No image uploaded</span>
+            </div>
+          )}
         </div>
       )}
 
       {/* Help Text */}
       {!hasImage && (
-        <div className="text-xs p-2 rounded bg-gray-50 border border-gray-200">
+        <div className="text-xs p-2 rounded-sm bg-neutral-50 border border-neutral-200">
           <div className="flex items-center gap-1">
-            <span className="text-gray-600">💡</span>
-            <span className="font-medium text-gray-800">Image Options:</span>
+            <HelpCircle size={14} className="text-neutral-600" />
+            <span className="font-medium text-neutral-800">Image Options:</span>
           </div>
-          <div className="mt-1 text-gray-700">
-            <div>• <strong>Background:</strong> Image behind content</div>
-            <div>• <strong>Element:</strong> Standalone image</div>
+          <div className="mt-1 text-neutral-700">
+            <div>
+              • <strong>Background:</strong> Image behind content
+            </div>
+            <div>
+              • <strong>Element:</strong> Standalone image
+            </div>
           </div>
         </div>
       )}

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import PreviewContainer from "@/components/UiBuilderComponents/PreviewContainer";
 import StyleController from "@/components/UiBuilderComponents/StyleController";
-import Container from "../ContainerClass";
+import Container from "../../lib/utils/ContainerClass";
 import {
   cloneContainer,
   deserializeContainer,
@@ -11,8 +11,10 @@ import {
   serializeContainer,
 } from "@/lib/utils/container";
 import PublishModal from "../PublishModal";
+import { Upload } from "lucide-react";
 
 export default function UIBuilder({ initialContainer }) {
+  
   const createDefaultContainer = () => new Container();
 
   // Initialize rootContainer with prop or default
@@ -29,7 +31,7 @@ export default function UIBuilder({ initialContainer }) {
     if (initialContainer) {
       return initialContainer.container_Id;
     }
-    return createDefaultContainer().container_Id;
+    return rootContainer.container_Id;
   });
 
   const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
@@ -323,28 +325,39 @@ export default function UIBuilder({ initialContainer }) {
   const isRootSelected = selectedContainerId === rootContainer.container_Id;
 
   return (
-    <div className="min-h-screen bg-emerald-50 p-3">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="min-h-screen bg-neutral-50 p-3 ">
+      <div className="max-w-[100rem] w-full mx-auto ">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 ">
           {/* Preview Section */}
-          <div className="flex flex-col bg-white rounded h-[60vh] md:h-[90vh]">
-            <h2 className="text-lg text-white font-bold  py-1 rounded-t text-center bg-emerald-600">
+          <div className="b flex flex-col bg-neutral-100 rounded-sm h-[60vh] md:col-span-3 md:h-[100vh] shadow-box">
+            <h2 className="text-lg text-neutral-100 font-bold  py-1 rounded-t-sm text-center bg-neutral-800">
               Preview
             </h2>
-            <div className="flex-1 border border-dashed border-emerald-300 py-4 px-2 overflow-y-auto min-h-0 bg-zinc-50">
+            <div className="flex-1 border-[0.5px] border-dashed border-neutral-400 py-6 px-2 overflow-y-auto min-h-0 bg-neutral-100">
               <PreviewContainer
                 container={rootContainer}
                 selectedContainerId={selectedContainerId}
                 onSelect={setSelectedContainerId}
               />
             </div>
+            <div className="p-3 bg-neutral-50 rounded-sm shadow-box">
+                  <button
+                    onClick={handleOpenPublishModal}
+                    className="w-full bg-neutral-800 text-white py-2 px-4 rounded button-box transition-colors flex items-center justify-center gap-2 font-medium"
+                  >
+                    <Upload className="w-4 h-4" />
+                    Publish Portfolio
+                  </button>
+            </div>
           </div>
 
+
           {/* Controller Section */}
-          <div className="flex flex-col bg-white rounded">
-            <h2 className="text-lg text-white font-bold mb-4 py-1 rounded-t text-center bg-emerald-600">
+          <div className="flex flex-col bg-neutral-100 rounded-sm md:col-span-2 shadow-box">
+            <h2 className="text-lg text-neutral-100 font-bold py-1 rounded-t-sm text-center bg-neutral-800">
               Controls
             </h2>
+            <div className="p-2 rounded-sm bg-neutral-100">
             {selectedContainer && (
               <StyleController
                 container={selectedContainer}
@@ -366,9 +379,9 @@ export default function UIBuilder({ initialContainer }) {
                 onImageChange={updateContainerImage}
                 onIconChange={updateContainerIcon}
                 onSectionIdChange={updateContainerSectionId}
-                onOpenPublishModal={handleOpenPublishModal}
               />
             )}
+            </div>
           </div>
         </div>
       </div>

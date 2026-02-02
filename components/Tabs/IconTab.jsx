@@ -1,60 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
+import { IconColorInput, IconSizeSelector } from "../Controls";
+import { CheckCircle, Circle } from "lucide-react";
 
-// Icon Size Selector component
-const IconSizeSelector = ({ value, onChange }) => {
-  const options = [
-    { value: "12", label: "XS" },
-    { value: "16", label: "SM" },
-    { value: "20", label: "MD" },
-    { value: "24", label: "LG" },
-    { value: "32", label: "XL" },
-  ];
 
-  return (
-    <div className="flex gap-1 flex-wrap">
-      {options.map((option) => (
-        <button
-          key={option.value}
-          onClick={() => onChange(option.value)}
-          className={`px-2 py-1 text-xs rounded ${
-            value === option.value
-              ? "bg-emerald-500 text-white"
-              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-          }`}
-        >
-          {option.label}
-        </button>
-      ))}
-    </div>
-  );
-};
 
-// Icon Color Input component
-const IconColorInput = ({ label, property, value, onChange }) => (
-  <div>
-    <label className="block text-xs font-medium mb-1">{label}</label>
-    <div className="flex gap-2 items-center">
-      <button
-        onClick={() => onChange(property, "transparent")}
-        className={`px-2 py-1 text-xs rounded ${
-          value === "transparent"
-            ? "bg-emerald-500 text-white"
-            : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-        }`}
-      >
-        Transparent
-      </button>
-      <input
-        type="color"
-        value={value !== "transparent" ? value || "#000000" : "#000000"}
-        onChange={(e) => onChange(property, e.target.value)}
-        className="flex-1 p-0 border rounded h-8"
-      />
-    </div>
-  </div>
-);
+
 
 // Common Lucide icons for quick selection
 const commonIcons = [
@@ -70,8 +22,6 @@ const commonIcons = [
   "X",
   "ArrowRight",
   "ArrowLeft",
-  "ArrowUp",
-  "ArrowDown",
   "Mail",
   "Phone",
   "Camera",
@@ -107,19 +57,23 @@ const IconTab = ({ container, handleIconChange }) => {
     <div className="space-y-3">
       {/* Icon Toggle */}
       <div>
-        <label className="block text-xs font-medium mb-1">Show Icon</label>
-        <button
-          onClick={() => handleIconChange("hasIcon", !hasIcon)}
-          className={`px-3 py-1 text-xs rounded flex items-center gap-1 ${
-            hasIcon
-              ? "bg-emerald-500 text-white"
-              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-          }`}
-        >
-          <span>{hasIcon ? "✓" : "○"}</span>
-          {hasIcon ? "Icon Enabled" : "Icon Disabled"}
-        </button>
-      </div>
+  <label className="block text-xs font-medium mb-1">Show Icon</label>
+  <button
+    onClick={() => handleIconChange("hasIcon", !hasIcon)}
+    className={`px-3 py-1 text-xs rounded flex items-center gap-1 ${
+      hasIcon
+        ? "bg-neutral-700 text-white"
+        : "bg-neutral-200 text-neutral-700 hover:bg-neutral-300"
+    }`}
+  >
+    {hasIcon ? (
+      <CheckCircle size={14} className="text-white" />
+    ) : (
+      <Circle size={14} className="text-neutral-600" />
+    )}
+    {hasIcon ? "Icon Enabled" : "Icon Disabled"}
+  </button>
+</div>
 
       {/* Icon Name Input */}
       <div className={hasIcon ? "" : "opacity-50 pointer-events-none"}>
@@ -136,12 +90,12 @@ const IconTab = ({ container, handleIconChange }) => {
           className={`w-full p-1 border rounded text-xs ${
             !isValidIconName && container.iconName
               ? "border-red-300 bg-red-50"
-              : "border-gray-300"
+              : "border-neutral-300"
           }`}
           placeholder="Heart, Star, Home, etc."
           disabled={!hasIcon}
         />
-        <p className="text-xs text-gray-500 mt-1">
+        <p className="text-xs text-neutral-500 mt-1">
           Enter exact Lucide React icon name
         </p>
       </div>
@@ -154,10 +108,10 @@ const IconTab = ({ container, handleIconChange }) => {
             <button
               key={iconName}
               onClick={() => handleQuickSelect(iconName)}
-              className={`p-1 text-xs rounded border hover:bg-gray-100 ${
+              className={`p-1 text-xs rounded border overflow-hidden hover:bg-neutral-200 ${
                 container.iconName === iconName
-                  ? "border-emerald-500 bg-emerald-100"
-                  : "border-gray-300"
+                  ? "border-neutral-700 bg-neutral-200"
+                  : "border-neutral-300 bg-neutral-100"
               }`}
               disabled={!hasIcon}
               title={iconName}
@@ -186,8 +140,6 @@ const IconTab = ({ container, handleIconChange }) => {
           onChange={handleIconChange}
         />
       </div>
-
-      
     </div>
   );
 };

@@ -1,33 +1,10 @@
 import UiBuilder from "@/components/UiBuilderComponents/UiBuilder";
-import Container from '@/components/ContainerClass';
-import { convertToPlainObject, fillContainerWithFormData } from "@/lib/utils/container";
+import { getContainerData } from "@/lib/api/api";
+import { fillContainerWithFormData } from "@/lib/utils/container";
 
-async function getPortfolioData() {
-  try {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-    const response = await fetch(`${baseUrl}/api/containers/6883c725c05a3f6c45cf6ad6`, {
-      cache: 'no-store' // Ensure fresh data
-    });
-    if (!response.ok) {
-      return null;
-    }
-    const result = await response.json();
-   
-    if (result.success) {
-      // Convert to Container instance
-      const plainObject = convertToPlainObject(result.data);
-      return Container.fromJSON(plainObject);
-    }
-   
-    return null;
-  } catch (error) {
-    console.error('Error fetching portfolio:', error);
-    return null;
-  }
-}
 
 export default async function UiBuilderPage({ searchParams }) {
-  const container = await getPortfolioData();
+  const container = await getContainerData("68b49d799fc8688f8ac00344");
   
   // Extract form data from URL parameters
   const awaitedSearchParam = await searchParams;

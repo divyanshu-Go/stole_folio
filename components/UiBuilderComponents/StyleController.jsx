@@ -23,6 +23,7 @@ const tabs = [
   "Image",
   "Icon",
   "Library",
+  "Save to Library",
 ];
 
 const StyleController = ({
@@ -45,7 +46,6 @@ const StyleController = ({
   onImageChange,
   onIconChange,
   onSectionIdChange,
-  onOpenPublishModal,
 }) => {
   const [activeTab, setActiveTab] = useState("Layout");
   const [projectName, setProjectName] = useState("");
@@ -93,6 +93,7 @@ const StyleController = ({
 
       const result = await response.json();
       setSaveStatus(response.ok ? "success" : "error");
+      if(response.ok) setProjectName("");
       if (!response.ok) console.error("Save failed:", result.error);
     } catch (err) {
       console.error("Save error:", err);
@@ -114,42 +115,16 @@ const StyleController = ({
   };
 
   return (
-    <div className="p-3 bg-zinc-50 rounded-lg">
-      <SaveProjectSection
-        isSaving={isSaving}
-        saveStatus={saveStatus}
-        onSave={handleSave}
-        projectName={projectName}
-        setProjectName={setProjectName}
-      />
-      <div className="mb-4 p-3 bg-white rounded border border-emerald-200">
-        <button
-          onClick={onOpenPublishModal}
-          className="w-full bg-emerald-600 text-white py-2 px-4 rounded hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2"
-        >
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-            />
-          </svg>
-          Publish Portfolio
-        </button>
-      </div>
+    <div className="p-2 space-y-4">
+      {/* 1️⃣ Active Tab Section */}
       <TabNavigation
         tabs={tabs}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
       />
 
-      <div className="space-y-3">
+      {/* Tab Content */}
+      <div className="space-y-3 shadow-box p-3 rounded-sm">
         {activeTab === "Layout" && <LayoutTab {...tabProps} />}
         {activeTab === "Text" && <TextTab {...tabProps} />}
         {activeTab === "Color" && <ColorTab {...tabProps} />}
@@ -171,6 +146,15 @@ const StyleController = ({
         {activeTab === "Icon" && (
           <IconTab container={container} handleIconChange={handleIconChange} />
         )}
+        {activeTab === "Save to Library" && (
+          <SaveProjectSection
+            isSaving={isSaving}
+            saveStatus={saveStatus}
+            onSave={handleSave}
+            projectName={projectName}
+            setProjectName={setProjectName}
+          />
+        )}
         {activeTab === "Library" && (
           <LibraryTab
             selectedContainerId={container.container_Id}
@@ -179,6 +163,7 @@ const StyleController = ({
         )}
       </div>
 
+      {/* 2️⃣ Action Buttons */}
       <ActionButtons
         container={container}
         copiedContainer={copiedContainer}
@@ -188,6 +173,7 @@ const StyleController = ({
         onAddChild={onAddChild}
         onDeleteChild={onDeleteChild}
       />
+
     </div>
   );
 };

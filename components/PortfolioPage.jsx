@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import Container from "./ContainerClass";
+import Container from "../lib/utils/ContainerClass";
 
 // Full-screen portfolio renderer without any builder UI
 const PortfolioPage = ({ containerData }) => {

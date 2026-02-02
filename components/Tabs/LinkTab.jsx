@@ -1,4 +1,5 @@
 "use client";
+import { AlertTriangle, CheckCircle, LinkIcon } from "lucide-react";
 import React from "react";
 
 // Link Target Selector component
@@ -6,8 +7,6 @@ const LinkTargetSelector = ({ value, onChange }) => {
   const options = [
     { value: "_self", label: "Same Tab" },
     { value: "_blank", label: "New Tab" },
-    { value: "_parent", label: "Parent Frame" },
-    { value: "_top", label: "Top Frame" },
   ];
 
   return (
@@ -16,10 +15,10 @@ const LinkTargetSelector = ({ value, onChange }) => {
         <button
           key={option.value}
           onClick={() => onChange(option.value)}
-          className={`px-2 py-1 text-xs rounded ${
+          className={`px-2 py-1 text-xs rounded-sm ${
             value === option.value
-              ? "bg-emerald-500 text-white"
-              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              ? "bg-neutral-700 text-neutral-50"
+              : "bg-neutral-200 text-neutral-600 hover:bg-neutral-300"
           }`}
         >
           {option.label}
@@ -29,20 +28,19 @@ const LinkTargetSelector = ({ value, onChange }) => {
   );
 };
 
-const LinkTab = ({ 
-  container, 
-  handleLinkChange, 
-  handleToggleClickable 
-}) => {
+const LinkTab = ({ container, handleLinkChange, handleToggleClickable }) => {
   const validateUrl = (url) => {
     if (!url) return true; // Empty is valid
-    // Basic URL validation
     try {
-      new URL(url.startsWith('http') ? url : `https://${url}`);
+      new URL(url.startsWith("http") ? url : `https://${url}`);
       return true;
     } catch {
-      // Check for relative paths
-      return url.startsWith('/') || url.startsWith('#') || url.startsWith('mailto:') || url.startsWith('tel:');
+      return (
+        url.startsWith("/") ||
+        url.startsWith("#") ||
+        url.startsWith("mailto:") ||
+        url.startsWith("tel:")
+      );
     }
   };
 
@@ -50,8 +48,10 @@ const LinkTab = ({
 
   const handleTestLink = () => {
     if (container.linkUrl && isValidUrl) {
-      const url = container.linkUrl.startsWith('http') ? container.linkUrl : `https://${container.linkUrl}`;
-      window.open(url, '_blank', 'noopener,noreferrer');
+      const url = container.linkUrl.startsWith("http")
+        ? container.linkUrl
+        : `https://${container.linkUrl}`;
+      window.open(url, "_blank", "noopener,noreferrer");
     }
   };
 
@@ -59,20 +59,26 @@ const LinkTab = ({
     <div className="space-y-3">
       {/* Enable/Disable Link */}
       <div>
-        <label className="flex items-center gap-2 text-xs font-medium">
+        <label className="flex items-center gap-2 text-xs font-medium text-neutral-700">
           <input
             type="checkbox"
             checked={container.isClickable}
-            onChange={(e) => handleToggleClickable(container.container_Id, e.target.checked)}
-            className="w-3 h-3"
+            onChange={(e) =>
+              handleToggleClickable(container.container_Id, e.target.checked)
+            }
+            className="w-3 h-3 accent-neutral-700 text-neutral-50 rounded-sm"
           />
           Make this container clickable
         </label>
       </div>
 
       {/* URL Input */}
-      <div className={container.isClickable ? "" : "opacity-50 pointer-events-none"}>
-        <label className="block text-xs font-medium mb-1">
+      <div
+        className={
+          container.isClickable ? "" : "opacity-50 pointer-events-none"
+        }
+      >
+        <label className="block text-xs font-medium mb-1 text-neutral-700">
           Link URL
           {!isValidUrl && container.linkUrl && (
             <span className="text-red-500 ml-1">• Invalid URL</span>
@@ -82,36 +88,49 @@ const LinkTab = ({
           type="text"
           value={container.linkUrl}
           onChange={(e) => handleLinkChange("linkUrl", e.target.value)}
-          className={`w-full p-1 border rounded text-xs ${
-            !isValidUrl && container.linkUrl 
-              ? "border-red-300 bg-red-50" 
-              : "border-gray-300"
+          className={`w-full p-1 border rounded-sm text-xs ${
+            !isValidUrl && container.linkUrl
+              ? "border-red-300 bg-red-50"
+              : "border-neutral-300 focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500"
           }`}
           placeholder="https://example.com or /about"
           disabled={!container.isClickable}
         />
-        <p className="text-xs text-gray-500 mt-1">
-          External: https://example.com | Internal: /about | Email: mailto:user@example.com
+        <p className="text-xs text-neutral-500 mt-1">
+          External: https://example.com | Internal: /about | Email:
+          mailto:user@example.com
         </p>
       </div>
 
       {/* Link Target */}
-      <div className={container.isClickable ? "" : "opacity-50 pointer-events-none"}>
-        <label className="block text-xs font-medium mb-1">Open Link In</label>
+      <div
+        className={
+          container.isClickable ? "" : "opacity-50 pointer-events-none"
+        }
+      >
+        <label className="block text-xs font-medium mb-1 text-neutral-700">
+          Open Link In
+        </label>
         <LinkTargetSelector
           value={container.linkTarget}
           onChange={(value) => handleLinkChange("linkTarget", value)}
         />
       </div>
 
-      {/* Link Title (for accessibility) */}
-      <div className={container.isClickable ? "" : "opacity-50 pointer-events-none"}>
-        <label className="block text-xs font-medium mb-1">Link Title (Tooltip)</label>
+      {/* Link Title */}
+      <div
+        className={
+          container.isClickable ? "" : "opacity-50 pointer-events-none"
+        }
+      >
+        <label className="block text-xs font-medium mb-1 text-neutral-700">
+          Link Title (Tooltip)
+        </label>
         <input
           type="text"
           value={container.linkTitle}
           onChange={(e) => handleLinkChange("linkTitle", e.target.value)}
-          className="w-full p-1 border rounded text-xs"
+          className="w-full p-1 border rounded-sm text-xs border-neutral-300 focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500"
           placeholder="Optional tooltip text..."
           disabled={!container.isClickable}
         />
@@ -122,7 +141,7 @@ const LinkTab = ({
         <div>
           <button
             onClick={handleTestLink}
-            className="w-full px-3 py-1 bg-green-500 text-white text-xs rounded hover:bg-green-600 transition-colors"
+            className="w-full px-3 py-1 bg-neutral-700 text-neutral-50 text-xs rounded-sm hover:bg-neutral-800 transition-colors"
           >
             🔗 Test Link
           </button>
@@ -131,17 +150,27 @@ const LinkTab = ({
 
       {/* Link Status Indicator */}
       {container.isClickable && (
-        <div className="text-xs p-2 rounded bg-emerald-50 border border-emerald-200">
+        <div className="text-xs p-2 rounded-sm bg-neutral-200 border border-neutral-300">
           <div className="flex items-center gap-1">
-            <span className="text-emerald-600">🔗</span>
-            <span className="font-medium text-emerald-800">Link Status:</span>
+            <LinkIcon size={14} className="text-neutral-600" />
+            <span className="font-medium text-neutral-800">Link Status:</span>
           </div>
           {container.linkUrl ? (
-            <div className="mt-1 text-emerald-700">
-              {isValidUrl ? "✓ Ready to use" : "⚠ URL needs to be fixed"}
+            <div className="mt-1 text-neutral-700 flex items-center gap-1">
+              {isValidUrl ? (
+                <>
+                  <CheckCircle size={14} className="text-green-600" />
+                  <span>Ready to use</span>
+                </>
+              ) : (
+                <>
+                  <AlertTriangle size={14} className="text-yellow-600" />
+                  <span>URL needs to be fixed</span>
+                </>
+              )}
             </div>
           ) : (
-            <div className="mt-1 text-emerald-700">Enter a URL to activate</div>
+            <div className="mt-1 text-neutral-700">Enter a URL to activate</div>
           )}
         </div>
       )}

@@ -1,12 +1,25 @@
 // app/api/containers/route.js
 import { NextResponse } from "next/server";
 import Container from "@/models/Container";
-import DbConnect from "@/lib/db/DbConnect"; // Adjust path as needed
+import DbConnect from "@/lib/db/DbConnect";
+import { verifyToken } from "@/lib/auth/token";
 
 export async function POST(request) {
   try {
     // Connect to database
     await DbConnect();
+
+    // 🔹 Get auth token from cookies
+    const authCookie = request.cookies.get("auth_token");
+    if (!authCookie) {
+      return NextResponse.json({ error: "Not Authenticated" }, { status: 401 });
+    }
+
+    const token = authCookie.value;
+    const payload = await verifyToken(token);
+    if (!payload) {
+      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+    }
 
     // Parse the request body
     const { containerData, projectName } = await request.json();
@@ -29,6 +42,8 @@ export async function POST(request) {
         sectionId: container.sectionId,
         type: container.type || "div",
         text: container.text || "Sample Text",
+        projectName: container.projectName || "Untitled Project",
+        author: container.author || payload.user._id,
         styles: container.styles || {},
         hoverStyles: container.hoverStyles || {},
         children: container.children
@@ -41,7 +56,7 @@ export async function POST(request) {
         linkTarget: container.linkTarget || "_self",
         linkTitle: container.linkTitle || "",
         isClickable: container.isClickable || false,
-        // NEW: Add image properties
+        // image properties
         imageUrl: container.imageUrl || "",
         imageAlt: container.imageAlt || "",
         imageMode: container.imageMode || "none",
@@ -49,7 +64,7 @@ export async function POST(request) {
         imageSize: container.imageSize || "cover",
         imageRepeat: container.imageRepeat || "no-repeat",
 
-        // NEW: Include icon properties
+        // icon properties
         iconName: container.iconName || "",
         iconSize: container.iconSize || "16",
         iconColor: container.iconColor || "transparent",
@@ -63,10 +78,8 @@ export async function POST(request) {
     // Create a new container document
     const newContainer = new Container({
       ...transformedContainer,
-      // Add metadata if needed
       projectName: projectName || "Untitled Project",
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      author: payload.user._id,
     });
 
     // Save to database
@@ -112,6 +125,8 @@ export async function POST(request) {
   }
 }
 
+
+
 export async function GET(request) {
   try {
     // Connect to database
@@ -121,6 +136,7 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const containerId = searchParams.get("id");
     const projectName = searchParams.get("projectName");
+    const authorId = searchParams.get("authorId");
 
     let query = {};
 
@@ -130,6 +146,10 @@ export async function GET(request) {
 
     if (projectName) {
       query.projectName = projectName;
+    }
+
+    if (authorId) {
+      query.author = authorId;
     }
 
     // Find containers

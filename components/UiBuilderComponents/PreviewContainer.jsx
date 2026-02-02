@@ -173,7 +173,7 @@ const PreviewContainer = ({
     return (
       <a {...commonProps}>
         {isSelected && (
-          <div className="absolute -top-6 -left-1 bg-emerald-700 font-normal text-white px-1.5 py-0.5 text-[10px] rounded-t-sm flex items-center gap-1">
+          <div className="absolute -top-6 -left-1 bg-blue-700 font-normal text-neutral-100 px-1.5 py-0.5 text-[10px] rounded-t-sm flex items-center gap-1">
             Selected
             <span className="text-[8px]">🔗</span>
           </div>
@@ -186,7 +186,7 @@ const PreviewContainer = ({
   return (
     <div {...commonProps}>
       {isSelected && (
-        <div className="absolute -top-6 -left-1 bg-emerald-700 font-normal text-white px-1.5 py-0.5 text-[10px] rounded-t-sm">
+        <div className="absolute -top-6 -left-1 bg-blue-700 font-normal text-neutral-100 px-1.5 py-0.5 text-[10px] rounded-t-sm">
           Selected
         </div>
       )}

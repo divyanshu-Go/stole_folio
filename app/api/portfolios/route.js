@@ -1,14 +1,34 @@
-// app/api/portfolios/route.js
 import { NextResponse } from "next/server";
 import Container from "@/models/Container";
 import Portfolio from "@/models/Portfolio";
 import DbConnect from "@/lib/db/DbConnect";
+import User from "@/models/user"; 
+import { verifyToken } from "@/lib/auth/token";
 
 export async function POST(request) {
   try {
     await DbConnect();
 
     const { containerData, portfolioData } = await request.json();
+
+    // ✅ 1. Get logged-in user from cookie
+    const authCookie = request.cookies.get("auth_token");
+    if (!authCookie) {
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    }
+
+    const token = authCookie.value;
+    const payload = await verifyToken(token);
+
+    if (!payload?.user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    }
+
+    // ✅ 2. Fetch user from DB
+    const user = await User.findById(payload.user._id).select("-password");
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
 
     // Validate required fields
     if (!containerData || !portfolioData) {
@@ -18,17 +38,15 @@ export async function POST(request) {
       );
     }
 
-    const { author, title, url, description } = portfolioData;
+    const { title, url, description } = portfolioData;
 
-    // Validate portfolio data
-    if (!author || !title || !url) {
+    if (!title || !url) {
       return NextResponse.json(
-        { error: "Author, title, and URL are required" },
+        { error: "Title and URL are required" },
         { status: 400 }
       );
     }
 
-    // Validate URL format (lowercase letters, numbers, hyphens only)
     if (!/^[a-z0-9-]+$/.test(url)) {
       return NextResponse.json(
         { error: "URL can only contain lowercase letters, numbers, and hyphens" },
@@ -36,7 +54,6 @@ export async function POST(request) {
       );
     }
 
-    // Check if URL already exists
     const existingPortfolio = await Portfolio.findOne({ url });
     if (existingPortfolio) {
       return NextResponse.json(
@@ -45,8 +62,8 @@ export async function POST(request) {
       );
     }
 
-    // Transform and save container (reusing existing logic)
-    const transformContainer = (container) => {
+    // ✅ Safer transform function
+   const transformContainer = (container) => {
       if (!container) return null;
 
       return {
@@ -54,7 +71,9 @@ export async function POST(request) {
         container_Id: container.container_Id,
         sectionId: container.sectionId,
         type: container.type || "div",
-        text: container.text || "",
+        text: container.text || "Sample Text",
+        projectName: container.projectName || "Untitled Project",
+        author: container.author || payload.user._id,
         styles: container.styles || {},
         hoverStyles: container.hoverStyles || {},
         children: container.children
@@ -62,16 +81,20 @@ export async function POST(request) {
           : [],
         locked: container.locked || false,
         hidden: container.hidden || false,
+        // Link properties
         linkUrl: container.linkUrl || "",
         linkTarget: container.linkTarget || "_self",
         linkTitle: container.linkTitle || "",
         isClickable: container.isClickable || false,
+        // image properties
         imageUrl: container.imageUrl || "",
         imageAlt: container.imageAlt || "",
         imageMode: container.imageMode || "none",
         imagePosition: container.imagePosition || "center",
         imageSize: container.imageSize || "cover",
         imageRepeat: container.imageRepeat || "no-repeat",
+
+        // icon properties
         iconName: container.iconName || "",
         iconSize: container.iconSize || "16",
         iconColor: container.iconColor || "transparent",
@@ -81,17 +104,17 @@ export async function POST(request) {
 
     const transformedContainer = transformContainer(containerData);
 
-    // Save container first
     const newContainer = new Container({
       ...transformedContainer,
       projectName: `${title} - Portfolio`,
+      author: user._id,
     });
 
     const savedContainer = await newContainer.save();
 
-    // Create portfolio record
+    // ✅ 3. Save portfolio with `author: user._id`
     const newPortfolio = new Portfolio({
-      author: author.trim(),
+      author: user._id,
       title: title.trim(),
       url: url.toLowerCase().trim(),
       containerId: savedContainer._id,
@@ -111,24 +134,20 @@ export async function POST(request) {
           containerId: savedContainer._id,
           redirectUrl: `/portfolio/${savedPortfolio.url}`,
         },
+        savedPortfolio,
       },
       { status: 201 }
     );
   } catch (error) {
     console.error("Error publishing portfolio:", error);
 
-    // Handle validation errors
     if (error.name === "ValidationError") {
       return NextResponse.json(
-        {
-          error: "Validation error",
-          details: error.message,
-        },
+        { error: "Validation error", details: error.message },
         { status: 400 }
       );
     }
 
-    // Handle duplicate URL error
     if (error.code === 11000) {
       return NextResponse.json(
         { error: "URL already exists. Please choose a different URL." },
@@ -143,34 +162,28 @@ export async function POST(request) {
   }
 }
 
-
-
-
-
-
 export async function GET() {
   try {
     await DbConnect();
 
-    // Fetch all public portfolios, sorted by newest first
-    const portfolios = await Portfolio.find({ 
-      isPublic: true 
-    })
-    .select('author title url description containerId createdAt') // Only select needed fields
-    .sort({ createdAt: -1 }) // Newest first
-    .lean(); // Return plain objects for better performance
+    // ✅ 4. Populate author (get name + email)
+    const portfolios = await Portfolio.find({ isPublic: true })
+      .populate("containerId")
+      .populate("author", "name email")
+      .select("author title url description containerId createdAt")
+      .sort({ createdAt: -1 })
+      .lean();
 
     return NextResponse.json(
       {
         success: true,
         data: portfolios,
-        count: portfolios.length
+        count: portfolios.length,
       },
       { status: 200 }
     );
   } catch (error) {
     console.error("Error fetching portfolios:", error);
-
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

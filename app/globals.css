@@ -1,16 +1,398 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: ##fafafa;
   --foreground: #171717;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Poppins , Arial, Helvetica, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .b {
   @apply border border-red-900
 }
+
+
+
+
+
+
+
+/* =========================
+  🌐 HERO SECTION STYLES
+  ========================= */
+
+/* Background grid pattern */
+.bg-grid-pattern {
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.2) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+    background-size: 10px 15px;
+}
+
+/* Gradient text animation */
+.gradient-text {
+  background-size: 200% 200%;
+}
+
+.bg-size-200 {
+  background-size: 200% 200%;
+}
+
+@keyframes gradient {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient {
+  animation: gradient 4s ease-in-out infinite;
+}
+
+/* Colorful gradient animation for Portfolio text */
+@keyframes gradient-colorful {
+  0% {
+    background-position: 0% 50%;
+    filter: hue-rotate(0deg);
+  }
+  25% {
+    background-position: 100% 50%;
+    filter: hue-rotate(90deg);
+  }
+  50% {
+    background-position: 100% 100%;
+    filter: hue-rotate(180deg);
+  }
+  75% {
+    background-position: 0% 100%;
+    filter: hue-rotate(270deg);
+  }
+  100% {
+    background-position: 0% 50%;
+    filter: hue-rotate(360deg);
+  }
+}
+
+.animate-gradient-colorful {
+  background: linear-gradient(45deg, #3b82f6, #8b5cf6, #ec4899, #f59e0b, #10b981, #3b82f6);
+  background-size: 300% 300%;
+  animation: gradient-colorful 6s ease-in-out infinite;
+  -webkit-background-clip: text;
+}
+
+/* Floating animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(5deg);
+  }
+}
+
+@keyframes float-delay {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-15px) rotate(-3deg);
+  }
+}
+
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(2deg);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delay {
+  animation: float-delay 8s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+.animate-float-slow {
+  animation: float-slow 10s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+/* Pulse animation */
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 0.05;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.1;
+    transform: scale(1.05);
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s ease-in-out infinite;
+}
+
+/* Fade in up animation */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+/* Animation delays */
+.animate-delay-200 {
+  animation-delay: 0.2s;
+}
+
+.animate-delay-400 {
+  animation-delay: 0.4s;
+}
+
+.animate-delay-500 {
+  animation-delay: 0.5s;
+}
+
+.animate-delay-600 {
+  animation-delay: 0.6s;
+}
+
+.animate-delay-800 {
+  animation-delay: 0.8s;
+}
+
+.animate-delay-1000 {
+  animation-delay: 1s;
+}
+
+.animate-delay-1200 {
+  animation-delay: 1.2s;
+}
+
+/* Gentle floating animation for image */
+@keyframes float-gentle {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.animate-float-gentle {
+  animation: float-gentle 5s ease-in-out infinite;
+}
+
+/* Gentle bounce for decorative elements */
+@keyframes bounce-gentle {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.1);
+  }
+}
+
+.animate-bounce-gentle {
+  animation: bounce-gentle 3s ease-in-out infinite;
+}
+
+
+
+/* =========================
+  🌐 HERO SECTION STYLES
+  ========================= */
+
+
+
+
+
+
+
+  
+/* =========================
+   🌐 NAVBAR STYLES
+   ========================= */
+
+.shadow-box {
+    box-shadow:
+      rgba(0, 0, 0, 0.9) 3px 3px;
+    border-top:1px solid rgba(0, 0, 0, 0.3);
+    border-left:1px solid rgba(0, 0, 0, 0.3);
+}
+
+/* Hover state */
+.nav-btn-box {
+  transition: box-shadow 0.15s ease-in-out, transform 0.15s ease-in-out;
+  border-top: 1px solid transparent;
+  border-left: 1px solid transparent;
+}
+
+.nav-btn-box:hover {
+  border-top: 1px solid rgba(0, 0, 0, 0.3);
+  border-left: 1px solid rgba(0, 0, 0, 0.3);
+  box-shadow: rgb(0, 76, 157) 2px 2px;
+  transform: translate(-1px, -1px); /* tiny lift effect */
+}
+
+/* Active (click) state */
+.nav-btn-box:active {
+  box-shadow: none; /* shadow disappears */
+  border:none;
+  transform: translate(2px, 2px); /* button moves down */
+}
+
+
+
+
+/* =========================
+  🌐 NAVBAR STYLES
+  ========================= */
+
+
+
+
+
+  
+/* =========================
+  🌐 GENERAL UI STYLES
+  ========================= */
+
+  
+  
+.hover-box {
+  transition: box-shadow 0.15s ease-in-out, transform 0.15s ease-in-out;
+}
+.hover-box:hover{
+  box-shadow: rgb(0, 88, 183) 2px 2px;
+  transform: translate(-1px, -1px); /* tiny lift effect */
+}
+
+/* Base button with lift effect */
+.button-box {
+  transition: box-shadow 0.15s ease-in-out, transform 0.2s ease-in-out;
+  background-color: rgb(38, 38, 38);   /* Tailwind bg-neutral-800 */
+  color: rgb(245, 245, 245);    /* Tailwind text-neutral-100 */
+}
+
+/* Hover state (elevated) */
+.button-box:hover {
+  box-shadow: rgb(0, 94, 194) 3px 3px; /* subtle blue glow shadow */
+  transform: translate(-2px, -2px); /* lift up */
+}
+
+/* Active (click) state */
+.button-box:active {
+  box-shadow: none;
+  transform: translate(1px, 1px); /* back to original */
+}
+
+
+
+
+.action-btn-box {
+  transition: box-shadow 0.15s ease-in-out, transform 0.2s ease-in-out;
+  /* color: rgb(245, 245, 245);    Tailwind text-neutral-100 */
+}
+
+/* Hover state (elevated) */
+.action-btn-box:hover {
+  box-shadow: rgb(0, 94, 194) 3px 3px; /* subtle blue glow shadow */
+  transform: translate(-2px, -2px); /* lift up */
+}
+
+/* Active (click) state */
+.action-btn-box:active {
+  box-shadow: none;
+  transform: translate(1px, 1px); /* back to original */
+}
+
+
+
+
+
+
+
+
+.color-btn-box{
+  transition: box-shadow 0.15s ease-in-out, transform 0.2s ease-in-out;
+}
+
+/* Hover state (elevated) */
+.color-btn-box:hover {
+  box-shadow: rgb(38, 38, 38) 3px 3px; /* subtle blue glow shadow */
+  transform: translate(-2px, -2px); /* lift up */
+}
+
+/* Active (click) state */
+.color-btn-box:active {
+  box-shadow: none;
+  transform: translate(1px, 1px); /* back to original */
+}
+
+
+
+
+
+.danger-btn-box {
+  transition: box-shadow 0.15s ease-in-out, transform 0.2s ease-in-out;
+  /* color: rgb(245, 245, 245);    Tailwind text-neutral-100 */
+}
+
+/* Hover state (elevated) */
+.danger-btn-box:hover {
+  box-shadow: oklch(57.7% 0.245 27.325) 3px 3px; /* subtle red glow shadow */
+  transform: translate(-2px, -2px); /* lift up */
+}
+
+/* Active (click) state */
+.danger-btn-box:active {
+  box-shadow: none;
+  transform: translate(1px, 1px); /* back to original */
+}
+
+
+
+
+.primary-btn-box {
+  transition: box-shadow 0.15s ease-in-out, transform 0.2s ease-in-out;
+  /* color: rgb(245, 245, 245);    Tailwind text-neutral-100 */
+}
+
+/* Hover state (elevated) */
+.primary-btn-box:hover {
+  box-shadow: oklch(54.6% 0.245 262.881) 3px 3px; /* subtle red glow shadow */
+  transform: translate(-2px, -2px); /* lift up */
+}
+
+/* Active (click) state */
+.primary-btn-box:active {
+  box-shadow: none;
+  transform: translate(1px, 1px); /* back to original */
+}
+
+
+/* =========================
+  🌐 GENERAL UI STYLES
+  ========================= */
