@@ -1,8 +1,8 @@
 import { verifyToken } from "@/lib/auth/token";
-import DbConnect from "@/lib/Db/DbConnect";
 import User from "@/models/user";
 import { hashPassword } from "@/lib/auth/password";
 import { NextResponse } from "next/server";
+import DbConnect from "@/lib/db/DbConnect";
 
 
 
