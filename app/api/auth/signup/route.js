@@ -1,4 +1,4 @@
-
+// app/api/auth/signup/route.js
 import { setAuthCookie } from "@/lib/auth/cookies";
 import { hashPassword } from "@/lib/auth/password";
 import { generateToken } from "@/lib/auth/token";

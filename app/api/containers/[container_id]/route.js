@@ -39,12 +39,11 @@ export async function GET(request, { params }) {
 
     const SavedContainer = await Container.findOne({
       _id: container_id,
-      author: payload.user._id, // only fetch if user owns it
     });
 
     if (!SavedContainer) {
       return NextResponse.json(
-        { success: false, error: "Container not found or not authorized" },
+        { success: false, error: "Container not found" },
         { status: 404 }
       );
     }
