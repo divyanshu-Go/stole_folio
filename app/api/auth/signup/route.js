@@ -24,6 +24,7 @@ export async function POST(req) {
       password: hashedPassword,
       role: "user",
     });
+    
 
     const token = await generateToken(user);
     const response = NextResponse.json({
