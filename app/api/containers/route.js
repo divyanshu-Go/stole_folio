@@ -80,6 +80,7 @@ export async function POST(request) {
       ...transformedContainer,
       projectName: projectName || "Untitled Project",
       author: payload.user._id,
+      isPublished:true,
     });
 
     // Save to database
@@ -138,7 +139,9 @@ export async function GET(request) {
     const projectName = searchParams.get("projectName");
     const authorId = searchParams.get("authorId");
 
-    let query = {};
+    let query = {
+      isPublished: false,   // 👈 Only drafts
+    };
 
     if (containerId) {
       query._id = containerId;

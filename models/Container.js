@@ -1,3 +1,4 @@
+ // models/Container.js
 import mongoose from "mongoose";
 
 // Styles schema
@@ -95,6 +96,11 @@ const ContainerSchema = new mongoose.Schema(
     iconSize: { type: String, default: "16" },
     iconColor: { type: String, default: "transparent" },
     hasIcon: { type: Boolean, default: false },
+
+    isPublished: {
+      type: Boolean,
+      default: false,
+    },
 
     // Behavior
     locked: { type: Boolean, default: false },

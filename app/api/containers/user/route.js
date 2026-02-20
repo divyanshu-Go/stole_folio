@@ -36,7 +36,7 @@ export async function GET(request) {
     }
 
     // 🔹 Get containers where author = user._id
-    const userContainers = await Container.find({ author: user._id })
+    const userContainers = await Container.find({ author: user._id, isPublished: true })
       .sort({ createdAt: -1 });
 
     return NextResponse.json({
