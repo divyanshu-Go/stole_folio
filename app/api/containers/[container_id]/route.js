@@ -39,6 +39,7 @@ export async function GET(request, { params }) {
 
     const SavedContainer = await Container.findOne({
       _id: container_id,
+      isPublished: true,
     });
 
     if (!SavedContainer) {

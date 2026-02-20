@@ -140,7 +140,7 @@ export async function GET(request) {
     const authorId = searchParams.get("authorId");
 
     let query = {
-      isPublished: false,   // 👈 Only drafts
+      isPublished: true, 
     };
 
     if (containerId) {
