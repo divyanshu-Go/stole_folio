@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { X } from "lucide-react";
+import { toast } from "sonner";
 
 const PublishModal = ({
   isOpen,
@@ -14,8 +15,8 @@ const PublishModal = ({
     url: "",
     description: "",
   });
+
   const [isPublishing, setIsPublishing] = useState(false);
-  const [publishStatus, setPublishStatus] = useState("");
   const [errors, setErrors] = useState({});
 
   const generateUrlSlug = (title) =>
@@ -31,7 +32,10 @@ const PublishModal = ({
     setFormData((prev) => ({ ...prev, [field]: value }));
 
     if (field === "title") {
-      setFormData((prev) => ({ ...prev, url: generateUrlSlug(value) }));
+      setFormData((prev) => ({
+        ...prev,
+        url: generateUrlSlug(value),
+      }));
     }
 
     if (errors[field]) {
@@ -41,13 +45,17 @@ const PublishModal = ({
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.title.trim()) newErrors.title = "Portfolio title is required";
+
+    if (!formData.title.trim())
+      newErrors.title = "Portfolio title is required";
+
     if (!formData.url.trim()) {
       newErrors.url = "URL is required";
     } else if (!/^[a-z0-9-]+$/.test(formData.url)) {
       newErrors.url =
         "URL can only contain lowercase letters, numbers, and hyphens";
     }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -56,7 +64,6 @@ const PublishModal = ({
     if (!validateForm()) return;
 
     setIsPublishing(true);
-    setPublishStatus("");
 
     try {
       const response = await fetch("/api/portfolios", {
@@ -77,20 +84,27 @@ const PublishModal = ({
       const result = await response.json();
 
       if (response.ok) {
-        setPublishStatus("success");
         onClose();
+
+        // Show a loading toast while the redirect delay happens
+        const toastId = toast.loading(
+          "Published! Redirecting to your portfolio..."
+        );
+
         setTimeout(() => {
+          toast.dismiss(toastId);
           window.location.href = result.data.redirectUrl;
         }, 1500);
       } else {
-        setPublishStatus("error");
-        if (result.error.includes("URL already exists")) {
+        toast.error(result.error || "Failed to publish portfolio");
+
+        if (result.error?.includes("URL already exists")) {
           setErrors({ url: result.error });
         }
       }
     } catch (err) {
       console.error("Publish error:", err);
-      setPublishStatus("error");
+      toast.error("Something went wrong while publishing");
     } finally {
       setIsPublishing(false);
     }
@@ -100,7 +114,6 @@ const PublishModal = ({
     if (!isPublishing) {
       setFormData({ title: "", url: "", description: "" });
       setErrors({});
-      setPublishStatus("");
       onClose();
     }
   };
@@ -108,10 +121,9 @@ const PublishModal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-neutral-800/40 backdrop-blur-xs flex items-center
-     justify-center z-50 p-4">
-      <div className="bg-neutral-100 rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] 
-      overflow-y-auto border border-neutral-200 shadow-box">
+    <div className="fixed inset-0 bg-neutral-800/40 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+      <div className="bg-neutral-100 rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto border border-neutral-200 shadow-box">
+
         {/* Header */}
         <div className="flex items-center justify-between p-5 border-b border-neutral-200">
           <h2 className="text-xl font-semibold text-neutral-900">
@@ -168,9 +180,6 @@ const PublishModal = ({
                 disabled={isPublishing}
               />
             </div>
-            <p className="text-xs text-neutral-500 mt-1">
-              Only lowercase letters, numbers, and hyphens allowed
-            </p>
             {errors.url && (
               <p className="text-red-500 text-xs mt-1">{errors.url}</p>
             )}
@@ -183,31 +192,19 @@ const PublishModal = ({
             </label>
             <textarea
               value={formData.description}
-              onChange={(e) => handleInputChange("description", e.target.value)}
+              onChange={(e) =>
+                handleInputChange("description", e.target.value)
+              }
               rows={3}
               className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-800"
               placeholder="Brief description of your portfolio..."
               disabled={isPublishing}
             />
           </div>
-
-          {/* Status Messages */}
-          {publishStatus === "success" && (
-            <div className="p-3 bg-green-50 border border-green-200 text-green-700 rounded-lg text-sm">
-              Portfolio published successfully! Redirecting to your portfolio...
-            </div>
-          )}
-
-          {publishStatus === "error" && (
-            <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
-              Failed to publish portfolio. Please try again.
-            </div>
-          )}
         </div>
 
         {/* Footer */}
-        <div className=" flex justify-end gap-3 p-5 border-t border-neutral-200
-         bg-neutral-200 rounded-b-2xl">
+        <div className="flex justify-end gap-3 p-5 border-t border-neutral-200 bg-neutral-200 rounded-b-2xl">
           <button
             onClick={handleClose}
             disabled={isPublishing}
@@ -218,12 +215,11 @@ const PublishModal = ({
           <button
             onClick={handlePublish}
             disabled={isPublishing}
-            className="px-4 py-2 bg-neutral-800 text-white rounded-md button-box
-             disabled:opacity-50 flex items-center gap-2"
+            className="px-4 py-2 bg-neutral-800 text-white rounded-md button-box disabled:opacity-50 flex items-center gap-2"
           >
             {isPublishing ? (
               <>
-                <div className="animate-spin disabled:cursor-pointer rounded-full h-4 w-4 border-b-2 border-white"></div>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
                 Publishing...
               </>
             ) : (

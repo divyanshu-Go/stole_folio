@@ -1,10 +1,11 @@
 import UiBuilder from "@/components/UiBuilderComponents/UiBuilder";
-import { getContainerData } from "@/lib/api/api";
+import { getContainerData, getUserProfile } from "@/lib/api/api";
 import { fillContainerWithFormData } from "@/lib/utils/container";
 
 
 export default async function UiBuilderPage({ searchParams }) {
   const container = await getContainerData("69987b423b795a63689fb75f");
+  const user = await getUserProfile();
   
   // Extract form data from URL parameters
   const awaitedSearchParam = await searchParams;
@@ -29,7 +30,7 @@ export default async function UiBuilderPage({ searchParams }) {
   
   return (
     <div className="w-full flex flex-col ">
-      <UiBuilder initialContainer={containerData} />
+      <UiBuilder initialContainer={containerData} user={user} />
     </div>
   );
 }

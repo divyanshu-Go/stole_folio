@@ -1,5 +1,7 @@
+// app/layout.js
 import { MuseoModerno } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "sonner";
 
 
 const museoModerno = MuseoModerno({
@@ -21,6 +23,7 @@ export default function RootLayout({ children }) {
         className={`${museoModerno.className} text-lg min-h-screen flex flex-col`}
       >
         {children}
+        <Toaster position="top-right" richColors />
       </body>
     </html>
   );

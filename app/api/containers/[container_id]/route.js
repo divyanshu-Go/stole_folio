@@ -17,29 +17,28 @@ export async function GET(request, { params }) {
       );
     }
 
-    // Auth check
-    const authCookie = request.cookies.get("auth_token");
-    if (!authCookie) {
-      return NextResponse.json(
-        { success: false, error: "Not Authenticated" },
-        { status: 401 }
-      );
-    }
+    // // Auth check
+    // const authCookie = request.cookies.get("auth_token");
+    // if (!authCookie) {
+    //   return NextResponse.json(
+    //     { success: false, error: "Not Authenticated" },
+    //     { status: 401 }
+    //   );
+    // }
 
-    const token = authCookie.value;
-    const payload = await verifyToken(token);
-    if (!payload) {
-      return NextResponse.json(
-        { success: false, error: "Invalid token" },
-        { status: 401 }
-      );
-    }
+    // const token = authCookie.value;
+    // const payload = await verifyToken(token);
+    // if (!payload) {
+    //   return NextResponse.json(
+    //     { success: false, error: "Invalid token" },
+    //     { status: 401 }
+    //   );
+    // }
 
     await DbConnect();
 
     const SavedContainer = await Container.findOne({
       _id: container_id,
-      isPublished: true,
     });
 
     if (!SavedContainer) {

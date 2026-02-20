@@ -1,18 +1,23 @@
 @import "tailwindcss";
 
+
+
 :root {
-  --background: ##fafafa;
+  --background: #fafafa;
   --foreground: #171717;
 }
 
 body {
-  background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
 
 .b {
   @apply border border-red-900
+}
+
+.bg{
+  @apply bg-red-600 text-red-500
 }
 
 

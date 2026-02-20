@@ -1,5 +1,7 @@
 "use client";
 import React, { useState } from "react";
+import { toast } from "sonner";
+
 import SaveProjectSection from "../Tabs/SaveProjectSection";
 import TabNavigation from "../Tabs/TabNavigation";
 import LayoutTab from "../Tabs/LayoutTab";
@@ -46,10 +48,10 @@ const StyleController = ({
   onImageChange,
   onIconChange,
   onSectionIdChange,
+  user,
 }) => {
   const [activeTab, setActiveTab] = useState("Layout");
   const [projectName, setProjectName] = useState("");
-  const [saveStatus, setSaveStatus] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
   const handleSectionIdChange = (sectionId) =>
@@ -77,8 +79,13 @@ const StyleController = ({
     onHoverStyleChange(container.container_Id, property, value);
 
   const handleSave = async () => {
+    if (!user) {
+      toast.error("Please log in to save your project.");
+      return;
+    }
+
     setIsSaving(true);
-    setSaveStatus("");
+
     try {
       const response = await fetch("/api/containers", {
         method: "POST",
@@ -92,15 +99,19 @@ const StyleController = ({
       });
 
       const result = await response.json();
-      setSaveStatus(response.ok ? "success" : "error");
-      if(response.ok) setProjectName("");
-      if (!response.ok) console.error("Save failed:", result.error);
+
+      if (response.ok) {
+        toast.success("Project saved successfully 🚀");
+        setProjectName("");
+      } else {
+        toast.error(result.error || "Failed to save project");
+        console.error("Save failed:", result.error);
+      }
     } catch (err) {
       console.error("Save error:", err);
-      setSaveStatus("error");
+      toast.error("Something went wrong while saving");
     } finally {
       setIsSaving(false);
-      setTimeout(() => setSaveStatus(""), 3000);
     }
   };
 
@@ -116,7 +127,7 @@ const StyleController = ({
 
   return (
     <div className="p-2 space-y-4">
-      {/* 1️⃣ Active Tab Section */}
+      {/* Active Tab Navigation */}
       <TabNavigation
         tabs={tabs}
         activeTab={activeTab}
@@ -149,7 +160,6 @@ const StyleController = ({
         {activeTab === "Save to Library" && (
           <SaveProjectSection
             isSaving={isSaving}
-            saveStatus={saveStatus}
             onSave={handleSave}
             projectName={projectName}
             setProjectName={setProjectName}
@@ -163,7 +173,7 @@ const StyleController = ({
         )}
       </div>
 
-      {/* 2️⃣ Action Buttons */}
+      {/* Action Buttons */}
       <ActionButtons
         container={container}
         copiedContainer={copiedContainer}
@@ -173,7 +183,6 @@ const StyleController = ({
         onAddChild={onAddChild}
         onDeleteChild={onDeleteChild}
       />
-
     </div>
   );
 };

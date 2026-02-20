@@ -1,7 +1,10 @@
+// components/WebsiteComponents/Sidebar.jsx
+
 "use client";
 import { useEffect } from "react";
 import Link from "next/link";
 import ProfileSection from "./ProfileSection";
+import { LayoutDashboard } from "lucide-react";
 
 const Sidebar = ({ user, isOpen, onClose, menuItems }) => {
   // Close sidebar when clicking outside
@@ -55,6 +58,23 @@ const Sidebar = ({ user, isOpen, onClose, menuItems }) => {
 
         {/* Navigation Menu */}
         <nav className="mt-3 space-y-1 px-2">
+          {/* 🔹 USER DASHBOARD - Only if logged in */}
+          {user && (
+            <Link
+              href="/user-dashboard"
+              onClick={onClose}
+              className="flex items-center gap-3 px-3 py-2 text-sm font-bold
+                 bg-black text-white rounded-sm tracking-wide button-box"
+            >
+              <LayoutDashboard className="h-4 w-4" />
+              Dashboard
+            </Link>
+          )}
+
+          {/* 🔹 Divider */}
+          {user && <div className="border-t border-black my-3"></div>}
+
+          {/* 🔹 Normal Menu Items */}
           {menuItems.map(({ name, path, icon: Icon }) => (
             <Link
               key={name}

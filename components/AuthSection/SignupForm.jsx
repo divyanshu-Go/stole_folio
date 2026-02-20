@@ -1,14 +1,13 @@
 // components/AuthSection/SignupForm.jsx
+
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { toast } from "sonner";
 import { AuthButton, FormInput } from "./AuthUtils/AuthFunctions";
 
-// Signup Form
 export const SignupForm = () => {
-  const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -26,17 +25,14 @@ export const SignupForm = () => {
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = "Enter a valid email";
     }
-
     if (!formData.password) {
       newErrors.password = "Password is required";
     } else if (formData.password.length < 8) {
-      newErrors.password = "Min 8 characters required";
+      newErrors.password = "Min 8 characters";
     }
-
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match";
     }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -62,17 +58,14 @@ export const SignupForm = () => {
 
       window.location.href = "/";
     } catch (error) {
-      setErrors({ submit: error.message });
+      toast.error(error.message);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div
-      className="mx-auto my-12 w-full max-w-md p-6 rounded-md
-                    shadow-box border border-neutral-400 bg-neutral-300"
-    >
+    <div className="mx-auto my-12 w-full max-w-md p-6 rounded-md shadow-box border border-neutral-400 bg-neutral-300">
       <h2 className="text-2xl font-bold text-center text-neutral-900 mb-6">
         Create an Account
       </h2>
@@ -84,6 +77,8 @@ export const SignupForm = () => {
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           error={errors.name}
+          autoComplete="name"
+          placeholder="Your full name"
         />
         <FormInput
           label="Email"
@@ -91,6 +86,8 @@ export const SignupForm = () => {
           value={formData.email}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           error={errors.email}
+          autoComplete="email"
+          placeholder="you@example.com"
         />
         <FormInput
           label="Password"
@@ -100,6 +97,7 @@ export const SignupForm = () => {
             setFormData({ ...formData, password: e.target.value })
           }
           error={errors.password}
+          autoComplete="new-password"
         />
         <FormInput
           label="Confirm Password"
@@ -109,17 +107,12 @@ export const SignupForm = () => {
             setFormData({ ...formData, confirmPassword: e.target.value })
           }
           error={errors.confirmPassword}
+          autoComplete="new-password"
         />
 
-        <p className="text-xs text-neutral-600">
+        <p className="text-xs text-neutral-500">
           Password must be at least 8 characters.
         </p>
-
-        {errors.submit && (
-          <div className="text-sm text-red-600 bg-red-100 px-3 py-2 rounded">
-            {errors.submit}
-          </div>
-        )}
 
         <AuthButton isLoading={isLoading}>Sign Up</AuthButton>
 

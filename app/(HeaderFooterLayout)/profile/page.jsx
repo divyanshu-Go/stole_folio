@@ -1,3 +1,4 @@
+// app/(HeaderFooterLayout)/profile/page.jsx
 import ProfileDashboard from "@/components/WebsiteComponents/ProfileDashboard";
 import { getUserProfile } from "@/lib/api/api";
 

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { toast } from "sonner";
 import PreviewContainer from "@/components/UiBuilderComponents/PreviewContainer";
 import StyleController from "@/components/UiBuilderComponents/StyleController";
 import Container from "../../lib/utils/ContainerClass";
@@ -13,7 +14,7 @@ import {
 import PublishModal from "../PublishModal";
 import { Upload } from "lucide-react";
 
-export default function UIBuilder({ initialContainer }) {
+export default function UIBuilder({ initialContainer, user }) {
   
   const createDefaultContainer = () => new Container();
 
@@ -37,6 +38,10 @@ export default function UIBuilder({ initialContainer }) {
   const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
 
   const handleOpenPublishModal = () => {
+    if (!user) {
+      toast.error("Please log in to publish your portfolio.");
+      return;
+    }
     setIsPublishModalOpen(true);
   };
 
@@ -379,6 +384,7 @@ export default function UIBuilder({ initialContainer }) {
                 onImageChange={updateContainerImage}
                 onIconChange={updateContainerIcon}
                 onSectionIdChange={updateContainerSectionId}
+                user={user}
               />
             )}
             </div>

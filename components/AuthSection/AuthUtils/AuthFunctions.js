@@ -1,3 +1,5 @@
+// components/AuthSection/AuthUtils/AuthFunctions.js
+
 "use client";
 
 import { Eye, EyeOff, LoaderCircle } from "lucide-react";
@@ -40,6 +42,7 @@ export const FormInput = ({ label, type, value, onChange, error }) => {
       <div className="relative">
         <input
           type={isPassword && !showPassword ? "password" : "text"}
+          placeholder=""
           value={value}
           onChange={onChange}
           className={`w-full border px-3 py-2 rounded-md text-sm bg-neutral-100

@@ -1,10 +1,18 @@
+// components/WebsiteComponents/Header.jsx
+
 "use client";
 
 import { useState } from "react";
 import Sidebar from "./Sidebar";
 import Link from "next/link";
-import { Home, FolderKanban, LayoutTemplate, Info } from "lucide-react";
-
+import {
+  Home,
+  FolderKanban,
+  LayoutTemplate,
+  Info,
+  Zap,
+  UserCircle,
+} from "lucide-react";
 
 const Header = ({ user }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -21,6 +29,7 @@ const Header = ({ user }) => {
     { name: "Home", path: "/", icon: Home },
     { name: "Portfolios", path: "/portfolios", icon: FolderKanban },
     { name: "UI-Builder", path: "/ui-builder/blank", icon: LayoutTemplate },
+    { name: "Quick Build", path: "/portfolio-form", icon: Zap },
     { name: "About-us", path: "/about", icon: Info },
   ];
 
@@ -68,13 +77,27 @@ const Header = ({ user }) => {
             </nav>
 
             {/* Logo - Right */}
-            <div className="px-3 py-2 rounded-sm">
-              <span className="flex items-center gap-3">
-                <img src="Logo.png" alt="Logo" width={25} />
-                <p className="font-extrabold text-lg text-stone-600">
-                  Stole Folio
-                </p>
-              </span>
+            {/* Profile Icon + Logo - Right */}
+            <div className="flex items-center gap-3">
+              {/* Profile Square Icon */}
+              <Link
+                href="/profile"
+                className="w-7 h-7 bg-neutral-900 text-white 
+             rounded-sm flex items-center justify-center
+             hover:bg-black transition"
+              >
+                <UserCircle className="w-4 h-4" />
+              </Link>
+
+              {/* Logo */}
+              <div className="px-2 py-1 rounded-sm">
+                <span className="flex items-center gap-2">
+                  <img src="Logo.png" alt="Logo" width={25} />
+                  <p className="font-extrabold text-lg text-stone-600">
+                    Stole Folio
+                  </p>
+                </span>
+              </div>
             </div>
           </div>
         </div>
