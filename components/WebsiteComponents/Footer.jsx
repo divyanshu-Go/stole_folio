@@ -1,5 +1,5 @@
 "use client";
-import { Github, Linkedin, Twitter } from "lucide-react";
+import { Github, Layers, Linkedin, Twitter } from "lucide-react";
 import Link from "next/link";
 
 const Footer = () => {
@@ -77,15 +77,15 @@ const Footer = () => {
             {/* Social Icons */}
             <div className="flex space-x-10">
               <Link
-                href="https://twitter.com"
+                href="https://divyanshu-portfolio-zeta.vercel.app/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-neutral-700 hover:text-neutral-950 transition-colors"
               >
-                <Twitter className="w-5 h-5" />
+                <Layers className="w-5 h-5" />
               </Link>
               <Link
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/in/divyanshu-sharma-go/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-neutral-700 hover:text-neutral-950 transition-colors"
@@ -93,7 +93,7 @@ const Footer = () => {
                 <Linkedin className="w-5 h-5" />
               </Link>
               <Link
-                href="https://github.com"
+                href="https://github.com/divyanshu-Go"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-neutral-700 hover:text-neutral-950 transition-colors"
