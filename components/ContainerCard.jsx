@@ -1,60 +1,54 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import ContainerRenderer from "@/components/ContainerRenderer";
 import Container from "@/lib/utils/ContainerClass";
-import { Edit, ExternalLink, Pin, MoreHorizontal, Trash2 } from "lucide-react";
-import ContainerActions from "@/components/ContainerActions";
+import { ExternalLink, Pin, MoreHorizontal, Trash2, Copy } from "lucide-react";
+import { toast } from "sonner";
 
-const ContainerCard = ({ containerData }) => {
-  const [isPinned, setIsPinned] = useState(false);
+const ContainerCard = ({ containerData, onDelete }) => {
+  const [isPinned, setIsPinned]       = useState(false);
   const [showActions, setShowActions] = useState(false);
-  const [isDeleted, setIsDeleted] = useState(false); // optimistic delete flag
+  const [isDeleting, setIsDeleting]   = useState(false);
+  const menuRef = useRef(null);
 
   const container = containerData ? Container.fromJSON(containerData) : null;
 
-  const handleDelete = async () => {
-    // Optimistic UI update → remove from screen immediately
-    setIsDeleted(true);
+  useEffect(() => {
+    const handler = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target))
+        setShowActions(false);
+    };
+    if (showActions) document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [showActions]);
 
+  const handleDelete = async () => {
+    if (!confirm("Delete this container?")) return;
+    setIsDeleting(true);
     try {
       const res = await fetch(`/api/containers/${containerData._id}`, {
         method: "DELETE",
         credentials: "include",
       });
-
       const data = await res.json();
-
       if (!res.ok) {
-        // If API failed → rollback UI
-        setIsDeleted(false);
-        alert(data.error || "Failed to delete container");
+        toast.error(data.error || "Failed to delete container");
+        setIsDeleting(false);
         return;
       }
-
-    } catch (err) {
-      console.error("Error deleting container:", err);
-      setIsDeleted(false); // rollback
-      alert("Something went wrong while deleting");
+      toast.success("Container deleted");
+      onDelete?.(containerData._id);
+    } catch {
+      toast.error("Something went wrong while deleting");
+      setIsDeleting(false);
     }
   };
 
-  const handleEdit = () => {
-    window.location.href = `/ui-builder/edit/${containerData.container_Id}`;
-  };
-
-  const handleOpen = () => {
+  // Opens container in ui-builder — existing working route
+  const handleUse = () => {
     window.location.href = `/ui-builder/${containerData._id}`;
   };
-
-  const handlePin = () => {
-    setIsPinned(!isPinned);
-    console.log("Pin container:", containerData.container_Id, !isPinned);
-  };
-
-  if (isDeleted) {
-    return null; // remove card from UI immediately
-  }
 
   if (!container) {
     return (
@@ -67,29 +61,15 @@ const ContainerCard = ({ containerData }) => {
   }
 
   return (
-    <div
-      className={`bg-neutral-100 rounded-sm shadow-box border border-neutral-300 overflow-hidden hover:shadow-lg transition-shadow duration-200 ${
-        isPinned ? "ring-2 ring-blue-500" : ""
-      }`}
-    >
-      {/* Pin Indicator */}
+    <div className={`bg-neutral-100 rounded-sm shadow-box border border-neutral-300 overflow-hidden hover:shadow-lg transition-shadow duration-200 ${isPinned ? "ring-2 ring-blue-500" : ""}`}>
       {isPinned && (
-        <div className="bg-blue-500 text-white text-xs px-2 py-1 text-center">
-          📌 Pinned
-        </div>
+        <div className="bg-blue-500 text-white text-xs px-2 py-1 text-center">📌 Pinned</div>
       )}
 
       {/* Preview */}
       <div className="h-32 bg-white border-b border-neutral-300 p-2 overflow-hidden">
-        <div
-          className="w-full h-full rounded-sm border border-neutral-200 overflow-hidden"
-          style={{
-            transform: "scale(0.4)",
-            transformOrigin: "top left",
-            width: "250%",
-            height: "250%",
-          }}
-        >
+        <div className="w-full h-full rounded-sm border border-neutral-200 overflow-hidden"
+          style={{ transform: "scale(0.4)", transformOrigin: "top left", width: "250%", height: "250%" }}>
           <ContainerRenderer container={container} />
         </div>
       </div>
@@ -97,7 +77,7 @@ const ContainerCard = ({ containerData }) => {
       {/* Info */}
       <div className="p-3">
         <div className="flex items-start justify-between mb-2">
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-0 pr-2">
             <h3 className="font-semibold text-neutral-800 mb-1 truncate text-sm">
               {containerData.projectName || "Untitled Project"}
             </h3>
@@ -106,55 +86,57 @@ const ContainerCard = ({ containerData }) => {
             </p>
           </div>
 
-          {/* More Actions */}
-          <div className="relative">
+          {/* Three-dot menu */}
+          <div className="relative flex-shrink-0" ref={menuRef}>
             <button
               onClick={() => setShowActions(!showActions)}
-              className="p-1 text-neutral-400 hover:text-neutral-600 hover:bg-neutral-200 rounded"
+              className="p-1.5 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-300 rounded transition-colors"
             >
-              <MoreHorizontal size={16} />
+              <MoreHorizontal size={15} />
             </button>
-
             {showActions && (
-              <ContainerActions
-                isPinned={isPinned}
-                onOpen={handleOpen}
-                onEdit={handleEdit}
-                onPin={handlePin}
-                onDelete={handleDelete}
-              />
+              <div className="absolute right-0 bottom-8 bg-neutral-800 border border-neutral-700 rounded-sm shadow-lg py-1 z-10 min-w-[140px]">
+                <button onClick={() => { handleUse(); setShowActions(false); }}
+                  className="w-full px-3 py-2 text-left text-sm text-neutral-200 hover:bg-neutral-700 flex items-center gap-2">
+                  <ExternalLink size={12} /> Open in Builder
+                </button>
+                <button onClick={() => { setIsPinned(p => !p); setShowActions(false); }}
+                  className="w-full px-3 py-2 text-left text-sm text-neutral-200 hover:bg-neutral-700 flex items-center gap-2">
+                  <Pin size={12} /> {isPinned ? "Unpin" : "Pin"}
+                </button>
+                <hr className="my-1 border-neutral-700" />
+                <button onClick={() => { handleDelete(); setShowActions(false); }}
+                  className="w-full px-3 py-2 text-left text-sm text-red-400 hover:bg-neutral-700 flex items-center gap-2">
+                  <Trash2 size={12} /> Delete
+                </button>
+              </div>
             )}
           </div>
         </div>
 
         {/* Quick Actions */}
         <div className="flex gap-2 mt-3">
-          <button
-            onClick={handleOpen}
-            className="flex-1 bg-neutral-800 text-white px-3 py-1.5 rounded-sm text-sm button-box transition-colors flex items-center justify-center gap-1"
-          >
-            <ExternalLink size={12} />
-            Open
+          <button onClick={handleUse}
+            className="flex-1 border border-neutral-500 text-neutral-800 hover:bg-neutral-800 hover:text-white
+                       px-3 py-1.5 rounded-sm text-xs font-medium transition-colors
+                       flex items-center justify-center gap-1.5">
+            <Copy size={11} /> Use Container
           </button>
-          <button
-            onClick={handleEdit}
-            className="px-3 py-1.5 rounded-sm text-md font-bold action-btn-box text-blue-600 bg-blue-200 transition-colors flex items-center justify-center"
-          >
-            <Edit size={12} />
+          <button onClick={handleUse}
+            className="flex-1 bg-neutral-800 text-white hover:bg-neutral-900
+                       px-3 py-1.5 rounded-sm text-xs font-medium button-box transition-colors
+                       flex items-center justify-center gap-1.5">
+            <ExternalLink size={11} /> Open
           </button>
-          <button
-            onClick={handleDelete}
-            className="px-3 py-1.5 rounded-sm text-sm danger-btn-box bg-red-200 text-red-600 transition-colors flex items-center justify-center"
-          >
-            <Trash2 size={12} />
+          <button onClick={handleDelete} disabled={isDeleting}
+            className="px-3 py-1.5 rounded-sm text-xs bg-red-200 text-red-600 hover:bg-red-300
+                       transition-colors flex items-center justify-center disabled:opacity-50">
+            <Trash2 size={11} />
           </button>
         </div>
 
-        {/* Metadata */}
         <div className="mt-2 pt-2 border-t border-neutral-200">
-          <p className="text-xs text-neutral-400">
-            ID: {containerData.container_Id}
-          </p>
+          <p className="text-xs text-neutral-400 truncate">ID: {containerData.container_Id}</p>
         </div>
       </div>
     </div>

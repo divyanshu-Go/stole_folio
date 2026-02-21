@@ -1,3 +1,4 @@
+// app/(HeaderFooterLayout)/ui-builder/[id]/page.jsx
 import UIBuilder from '@/components/UiBuilderComponents/UiBuilder';
 import { getContainerData, getUserProfile } from '@/lib/api/api';
 

@@ -82,11 +82,11 @@ const Header = ({ user }) => {
               {/* Profile Square Icon */}
               <Link
                 href="/profile"
-                className="w-7 h-7 bg-neutral-900 text-white 
+                className="w-8 h-8 bg-neutral-900 text-white 
              rounded-sm flex items-center justify-center
-             hover:bg-black transition"
+             transition action-btn-box  font-extrabold"
               >
-                <UserCircle className="w-4 h-4" />
+                <UserCircle className="w-5 h-5  text-orange-300" />
               </Link>
 
               {/* Logo */}

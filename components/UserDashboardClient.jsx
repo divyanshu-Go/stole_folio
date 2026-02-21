@@ -4,54 +4,54 @@ import React, { useState } from "react";
 import ContainerCard from "@/components/ContainerCard";
 import PortfolioCard from "@/components/PortfolioCard1";
 
-const UserDashboardClient = ({ containers, portfolios }) => {
-  const [activeTab, setActiveTab] = useState("containers"); // "containers" or "portfolios"
+const UserDashboardClient = ({ containers: initialContainers, portfolios: initialPortfolios }) => {
+  const [activeTab, setActiveTab] = useState("containers");
 
-  const currentData = activeTab === "containers" ? containers : portfolios;
-  const currentCount = currentData.length;
+  // Lift into local state so deletions persist across tab switches
+  const [containers, setContainers] = useState(initialContainers ?? []);
+  const [portfolios, setPortfolios] = useState(initialPortfolios ?? []);
+
+  const handleContainerDelete = (id) =>
+    setContainers((prev) => prev.filter((c) => c._id !== id));
+
+  const handlePortfolioDelete = (id) =>
+    setPortfolios((prev) => prev.filter((p) => p._id !== id));
+
+  const currentData   = activeTab === "containers" ? containers : portfolios;
+  const currentCount  = currentData.length;
 
   return (
     <div className="min-h-screen bg-neutral-50 p-6">
       <div className="max-w-7xl mx-auto">
-        {/* Header Section */}
+
+        {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-neutral-800 mb-2">
-            My Dashboard
-          </h1>
-          <p className="text-neutral-600">
-            Manage and organize your containers and portfolios
-          </p>
+          <h1 className="text-3xl font-bold text-neutral-800 mb-2">My Dashboard</h1>
+          <p className="text-neutral-600">Manage and organize your containers and portfolios</p>
         </div>
 
-        {/* Tabs Navigation */}
+        {/* Tabs */}
         <div className="mb-6">
           <div className="bg-white rounded-sm shadow-box border border-neutral-300 overflow-hidden">
             <div className="flex">
-              <button
-                onClick={() => setActiveTab("containers")}
-                className={`flex-1 px-6 py-3 text-sm font-medium transition-colors ${
-                  activeTab === "containers"
-                    ? "bg-neutral-800 text-white"
-                    : "bg-white text-neutral-600 hover:bg-neutral-50"
-                }`}
-              >
-                Containers ({containers.length})
-              </button>
-              <button
-                onClick={() => setActiveTab("portfolios")}
-                className={`flex-1 px-6 py-3 text-sm font-medium transition-colors ${
-                  activeTab === "portfolios"
-                    ? "bg-neutral-800 text-white"
-                    : "bg-white text-neutral-600 hover:bg-neutral-50"
-                }`}
-              >
-                Portfolios ({portfolios.length})
-              </button>
+              {["containers", "portfolios"].map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`flex-1 px-6 py-3 text-sm font-medium transition-colors capitalize ${
+                    activeTab === tab
+                      ? "bg-neutral-800 text-white"
+                      : "bg-white text-neutral-600 hover:bg-neutral-50"
+                  }`}
+                >
+                  {tab} ({tab === "containers" ? containers.length : portfolios.length})
+                </button>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* Stats Section */}
+        {/* Stats */}
         <div className="mb-6">
           <div className="bg-neutral-100 rounded-sm shadow-box p-4 border border-neutral-300">
             <div className="flex items-center justify-between">
@@ -59,9 +59,7 @@ const UserDashboardClient = ({ containers, portfolios }) => {
                 <p className="text-sm text-neutral-500">
                   Total {activeTab === "containers" ? "Containers" : "Portfolios"}
                 </p>
-                <p className="text-2xl font-semibold text-neutral-800">
-                  {currentCount}
-                </p>
+                <p className="text-2xl font-semibold text-neutral-800">{currentCount}</p>
               </div>
               <div className="text-neutral-400">
                 {activeTab === "containers" ? (
@@ -78,24 +76,25 @@ const UserDashboardClient = ({ containers, portfolios }) => {
           </div>
         </div>
 
-        {/* Content Grid */}
+        {/* Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {currentData.length > 0 ? (
-            currentData.map((item, index) => (
+            currentData.map((item, index) =>
               activeTab === "containers" ? (
-                <ContainerCard 
-                  key={item._id || index} 
-                  containerData={item} 
+                <ContainerCard
+                  key={item._id || index}
+                  containerData={item}
+                  onDelete={handleContainerDelete}
                 />
               ) : (
-                <PortfolioCard 
-                  key={item._id || index} 
-                  portfolioData={item} 
+                <PortfolioCard
+                  key={item._id || index}
+                  portfolioData={item}
+                  onDelete={handlePortfolioDelete}
                 />
               )
-            ))
+            )
           ) : (
-            /* Empty State */
             <div className="col-span-full text-center py-12">
               <div className="text-neutral-400 mb-4">
                 <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -112,7 +111,7 @@ const UserDashboardClient = ({ containers, portfolios }) => {
                 Create New {activeTab === "containers" ? "Container" : "Portfolio"}
               </button>
             </div>
-          )}  
+          )}
         </div>
       </div>
     </div>

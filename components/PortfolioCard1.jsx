@@ -1,65 +1,59 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import ContainerRenderer from "@/components/ContainerRenderer";
 import Container from "@/lib/utils/ContainerClass";
-import { Edit, ExternalLink, Pin, MoreHorizontal, Trash2, Eye } from "lucide-react";
+import { Eye, Pin, MoreHorizontal, Trash2, Copy, CheckCircle, Clock } from "lucide-react";
+import { toast } from "sonner";
 
-const PortfolioCard = ({ portfolioData }) => {
-  const [isPinned, setIsPinned] = useState(false);
+const PortfolioCard = ({ portfolioData, onDelete }) => {
+  const [isPinned, setIsPinned]       = useState(false);
   const [showActions, setShowActions] = useState(false);
-  const [isDeleted, setIsDeleted] = useState(false);
+  const [isDeleting, setIsDeleting]   = useState(false);
+  const menuRef = useRef(null);
 
-  // Extract container data from the nested containerId object
   const containerData = portfolioData?.containerId;
-  const container = containerData ? Container.fromJSON(containerData) : null;
+  const container     = containerData ? Container.fromJSON(containerData) : null;
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target))
+        setShowActions(false);
+    };
+    if (showActions) document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [showActions]);
 
   const handleDelete = async () => {
-    setIsDeleted(true);
-
+    if (!confirm("Delete this portfolio?")) return;
+    setIsDeleting(true);
     try {
-      const res = await fetch(`/api/portfolios/${portfolioData._id}`, {
+      const res = await fetch(`/api/portfolios/${portfolioData.url}`, {
         method: "DELETE",
         credentials: "include",
       });
-
       const data = await res.json();
-
       if (!res.ok) {
-        setIsDeleted(false);
-        alert(data.error || "Failed to delete portfolio");
+        toast.error(data.error || "Failed to delete portfolio");
+        setIsDeleting(false);
         return;
       }
-    } catch (err) {
-      console.error("Error deleting portfolio:", err);
-      setIsDeleted(false);
-      alert("Something went wrong while deleting");
+      toast.success("Portfolio deleted");
+      onDelete?.(portfolioData._id);
+    } catch {
+      toast.error("Something went wrong while deleting");
+      setIsDeleting(false);
     }
   };
 
-  const handleEdit = () => {
-    // Navigate to portfolio edit page
-    window.location.href = `/portfolio/edit/${portfolioData._id}`;
-  };
-
   const handleView = () => {
-    // Navigate to public portfolio view
-    window.location.href = `/portfolio/${portfolioData.url}`;
+    window.open(`/portfolio/${portfolioData.url}`, "_blank");
   };
 
-  const handleEditContainer = () => {
-    // Navigate to container editor
-    window.location.href = `/ui-builder/edit/${containerData?.container_Id}`;
+  // Opens the portfolio's container in ui-builder — same working route
+  const handleUsePortfolio = () => {
+    window.location.href = `/ui-builder/${containerData?._id}`;
   };
-
-  const handlePin = () => {
-    setIsPinned(!isPinned);
-    console.log("Pin portfolio:", portfolioData._id, !isPinned);
-  };
-
-  if (isDeleted) {
-    return null;
-  }
 
   if (!container || !containerData) {
     return (
@@ -72,36 +66,23 @@ const PortfolioCard = ({ portfolioData }) => {
   }
 
   return (
-    <div
-      className={`bg-neutral-100 rounded-sm shadow-box border border-neutral-300 overflow-hidden hover:shadow-lg transition-shadow duration-200 ${
-        isPinned ? "ring-2 ring-blue-500" : ""
-      }`}
-    >
-      {/* Pin Indicator */}
+    <div className={`bg-neutral-100 rounded-sm shadow-box border border-neutral-300 overflow-hidden hover:shadow-lg transition-shadow duration-200 ${isPinned ? "ring-2 ring-blue-500" : ""}`}>
       {isPinned && (
-        <div className="bg-blue-500 text-white text-xs px-2 py-1 text-center">
-          📌 Pinned
-        </div>
+        <div className="bg-blue-500 text-white text-xs px-2 py-1 text-center">📌 Pinned</div>
       )}
 
-      {/* Public Indicator */}
-      {portfolioData.isPublic && (
-        <div className="bg-green-500 text-white text-xs px-2 py-1 text-center">
-          🌐 Public
-        </div>
-      )}
+      {/* Approval status strip */}
+      <div className={`text-white text-xs px-2 py-1 flex items-center justify-center gap-1
+        ${portfolioData.isApproved ? "bg-green-600" : "bg-amber-500"}`}>
+        {portfolioData.isApproved
+          ? <><CheckCircle size={10} /> Approved</>
+          : <><Clock size={10} /> Pending Approval</>}
+      </div>
 
       {/* Preview */}
       <div className="h-32 bg-white border-b border-neutral-300 p-2 overflow-hidden">
-        <div
-          className="w-full h-full rounded-sm border border-neutral-200 overflow-hidden"
-          style={{
-            transform: "scale(0.4)",
-            transformOrigin: "top left",
-            width: "250%",
-            height: "250%",
-          }}
-        >
+        <div className="w-full h-full rounded-sm border border-neutral-200 overflow-hidden"
+          style={{ transform: "scale(0.4)", transformOrigin: "top left", width: "250%", height: "250%" }}>
           <ContainerRenderer container={container} />
         </div>
       </div>
@@ -109,64 +90,42 @@ const PortfolioCard = ({ portfolioData }) => {
       {/* Info */}
       <div className="p-3">
         <div className="flex items-start justify-between mb-2">
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-0 pr-2">
             <h3 className="font-semibold text-neutral-800 mb-1 truncate text-sm">
               {portfolioData.title || "Untitled Portfolio"}
             </h3>
-            <p className="text-xs text-neutral-500 truncate mb-1">
+            <p className="text-xs text-neutral-500 truncate mb-0.5">
               {portfolioData.description || "No description"}
             </p>
-            <p className="text-xs text-neutral-400 truncate">
-              URL: /{portfolioData.url}
-            </p>
+            <p className="text-xs text-neutral-400 truncate">/{portfolioData.url}</p>
           </div>
 
-          {/* More Actions */}
-          <div className="relative">
+          {/* Three-dot menu */}
+          <div className="relative flex-shrink-0" ref={menuRef}>
             <button
               onClick={() => setShowActions(!showActions)}
-              className="p-1 text-neutral-400 hover:text-neutral-600 hover:bg-neutral-200 rounded"
+              className="p-1.5 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-300 rounded transition-colors"
             >
-              <MoreHorizontal size={16} />
+              <MoreHorizontal size={15} />
             </button>
-
             {showActions && (
-              <div className="absolute right-0 top-8 bg-white border border-neutral-300 rounded-sm shadow-lg py-1 z-10 min-w-[120px]">
-                <button
-                  onClick={handleView}
-                  className="w-full px-3 py-1.5 text-left text-sm hover:bg-neutral-50 flex items-center gap-2"
-                >
-                  <Eye size={12} />
-                  View Public
+              <div className="absolute right-0 bottom-8 bg-neutral-800 border border-neutral-700 rounded-sm shadow-lg py-1 z-10 min-w-[150px]">
+                <button onClick={() => { handleView(); setShowActions(false); }}
+                  className="w-full px-3 py-2 text-left text-sm text-neutral-200 hover:bg-neutral-700 flex items-center gap-2">
+                  <Eye size={12} /> View Live
                 </button>
-                <button
-                  onClick={handleEdit}
-                  className="w-full px-3 py-1.5 text-left text-sm hover:bg-neutral-50 flex items-center gap-2"
-                >
-                  <Edit size={12} />
-                  Edit Portfolio
+                <button onClick={() => { handleUsePortfolio(); setShowActions(false); }}
+                  className="w-full px-3 py-2 text-left text-sm text-neutral-200 hover:bg-neutral-700 flex items-center gap-2">
+                  <Copy size={12} /> Use as Template
                 </button>
-                <button
-                  onClick={handleEditContainer}
-                  className="w-full px-3 py-1.5 text-left text-sm hover:bg-neutral-50 flex items-center gap-2"
-                >
-                  <Edit size={12} />
-                  Edit Container
+                <button onClick={() => { setIsPinned(p => !p); setShowActions(false); }}
+                  className="w-full px-3 py-2 text-left text-sm text-neutral-200 hover:bg-neutral-700 flex items-center gap-2">
+                  <Pin size={12} /> {isPinned ? "Unpin" : "Pin"}
                 </button>
-                <button
-                  onClick={handlePin}
-                  className="w-full px-3 py-1.5 text-left text-sm hover:bg-neutral-50 flex items-center gap-2"
-                >
-                  <Pin size={12} />
-                  {isPinned ? "Unpin" : "Pin"}
-                </button>
-                <hr className="my-1 border-neutral-200" />
-                <button
-                  onClick={handleDelete}
-                  className="w-full px-3 py-1.5 text-left text-sm hover:bg-red-50 text-red-600 flex items-center gap-2"
-                >
-                  <Trash2 size={12} />
-                  Delete
+                <hr className="my-1 border-neutral-700" />
+                <button onClick={() => { handleDelete(); setShowActions(false); }}
+                  className="w-full px-3 py-2 text-left text-sm text-red-400 hover:bg-neutral-700 flex items-center gap-2">
+                  <Trash2 size={12} /> Delete
                 </button>
               </div>
             )}
@@ -175,35 +134,27 @@ const PortfolioCard = ({ portfolioData }) => {
 
         {/* Quick Actions */}
         <div className="flex gap-2 mt-3">
-          <button
-            onClick={handleView}
-            className="flex-1 bg-neutral-800 text-white px-3 py-1.5 rounded-sm text-sm button-box transition-colors flex items-center justify-center gap-1"
-          >
-            <Eye size={12} />
-            View
+          <button onClick={handleUsePortfolio}
+            className="flex-1 border border-neutral-500 text-neutral-800 hover:bg-neutral-800 hover:text-white
+                       px-3 py-1.5 rounded-sm text-xs font-medium transition-colors
+                       flex items-center justify-center gap-1.5">
+            <Copy size={11} /> Use Portfolio
           </button>
-          <button
-            onClick={handleEdit}
-            className="px-3 py-1.5 rounded-sm text-md font-bold action-btn-box text-blue-600 bg-blue-200 transition-colors flex items-center justify-center"
-          >
-            <Edit size={12} />
+          <button onClick={handleView}
+            className="flex-1 bg-neutral-800 text-white hover:bg-neutral-900
+                       px-3 py-1.5 rounded-sm text-xs font-medium button-box transition-colors
+                       flex items-center justify-center gap-1.5">
+            <Eye size={11} /> View Live
           </button>
-          <button
-            onClick={handleDelete}
-            className="px-3 py-1.5 rounded-sm text-sm danger-btn-box bg-red-200 text-red-600 transition-colors flex items-center justify-center"
-          >
-            <Trash2 size={12} />
+          <button onClick={handleDelete} disabled={isDeleting}
+            className="px-3 py-1.5 rounded-sm text-xs bg-red-200 text-red-600 hover:bg-red-300
+                       transition-colors flex items-center justify-center disabled:opacity-50">
+            <Trash2 size={11} />
           </button>
         </div>
 
-        {/* Metadata */}
-        <div className="mt-2 pt-2 border-t border-neutral-200">
-          <p className="text-xs text-neutral-400">
-            Container ID: {containerData.container_Id}
-          </p>
-          <p className="text-xs text-neutral-400">
-            Created: {new Date(portfolioData.createdAt).toLocaleDateString()}
-          </p>
+        <div className="mt-2 pt-2 border-t border-neutral-200 space-y-0.5">
+          <p className="text-xs text-neutral-400">{new Date(portfolioData.createdAt).toLocaleDateString()}</p>
         </div>
       </div>
     </div>

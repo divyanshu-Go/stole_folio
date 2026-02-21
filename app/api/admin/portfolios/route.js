@@ -1,9 +1,9 @@
-// api/portfolios/route.js
+// app/api/portfolios/route.js
 import { NextResponse } from "next/server";
 import Container from "@/models/Container";
 import Portfolio from "@/models/Portfolio";
 import DbConnect from "@/lib/db/DbConnect";
-import User from "@/models/user"; 
+import User from "@/models/user";
 import { verifyToken } from "@/lib/auth/token";
 
 export async function POST(request) {
@@ -12,7 +12,6 @@ export async function POST(request) {
 
     const { containerData, portfolioData } = await request.json();
 
-    // ✅ 1. Get logged-in user from cookie
     const authCookie = request.cookies.get("auth_token");
     if (!authCookie) {
       return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
@@ -25,13 +24,11 @@ export async function POST(request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
 
-    // ✅ 2. Fetch user from DB
     const user = await User.findById(payload.user._id).select("-password");
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // Validate required fields
     if (!containerData || !portfolioData) {
       return NextResponse.json(
         { error: "Container data and portfolio data are required" },
@@ -63,10 +60,8 @@ export async function POST(request) {
       );
     }
 
-    // ✅ Safer transform function
-   const transformContainer = (container) => {
+    const transformContainer = (container) => {
       if (!container) return null;
-
       return {
         name: container.name || "Container",
         container_Id: container.container_Id,
@@ -82,20 +77,16 @@ export async function POST(request) {
           : [],
         locked: container.locked || false,
         hidden: container.hidden || false,
-        // Link properties
         linkUrl: container.linkUrl || "",
         linkTarget: container.linkTarget || "_self",
         linkTitle: container.linkTitle || "",
         isClickable: container.isClickable || false,
-        // image properties
         imageUrl: container.imageUrl || "",
         imageAlt: container.imageAlt || "",
         imageMode: container.imageMode || "none",
         imagePosition: container.imagePosition || "center",
         imageSize: container.imageSize || "cover",
         imageRepeat: container.imageRepeat || "no-repeat",
-
-        // icon properties
         iconName: container.iconName || "",
         iconSize: container.iconSize || "16",
         iconColor: container.iconColor || "transparent",
@@ -113,7 +104,6 @@ export async function POST(request) {
 
     const savedContainer = await newContainer.save();
 
-    // ✅ 3. Save portfolio with `author: user._id`
     const newPortfolio = new Portfolio({
       author: user._id,
       title: title.trim(),
@@ -121,6 +111,7 @@ export async function POST(request) {
       containerId: savedContainer._id,
       description: description?.trim() || "",
       isPublic: true,
+      isApproved: false, // always starts pending
     });
 
     const savedPortfolio = await newPortfolio.save();
@@ -128,7 +119,7 @@ export async function POST(request) {
     return NextResponse.json(
       {
         success: true,
-        message: "Portfolio published successfully",
+        message: "Portfolio published successfully — pending admin approval",
         data: {
           portfolioId: savedPortfolio._id,
           url: savedPortfolio.url,
@@ -163,12 +154,12 @@ export async function POST(request) {
   }
 }
 
+// Public gallery — only approved portfolios
 export async function GET() {
   try {
     await DbConnect();
 
-    // ✅ 4. Populate author (get name + email)
-    const portfolios = await Portfolio.find({ isPublic: true, isApproved: true })
+    const portfolios = await Portfolio.find({ isPublic: true })
       .populate("containerId")
       .populate("author", "name email")
       .select("author title url description containerId createdAt")
@@ -176,11 +167,7 @@ export async function GET() {
       .lean();
 
     return NextResponse.json(
-      {
-        success: true,
-        data: portfolios,
-        count: portfolios.length,
-      },
+      { success: true, data: portfolios, count: portfolios.length },
       { status: 200 }
     );
   } catch (error) {

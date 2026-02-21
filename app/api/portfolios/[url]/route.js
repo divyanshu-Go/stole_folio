@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import Portfolio from "@/models/Portfolio";
 import Container from "@/models/Container";
 import DbConnect from "@/lib/db/DbConnect";
+import { getUser } from "@/lib/auth/getUser";
 
 export async function GET(request, { params }) {
   try {
@@ -63,3 +64,31 @@ export async function GET(request, { params }) {
     );
   }
 }
+
+
+
+export async function DELETE(request, { params }) {
+  try {
+    const user = await getUser(request);
+    if (!user) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
+    const { url } = await params;
+    await DbConnect();
+
+    const deleted = await Portfolio.findOneAndDelete({ url: url.toLowerCase() });
+    if (!deleted) {
+      return NextResponse.json({ error: "Portfolio not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(
+      { success: true, message: "Portfolio deleted" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error(" delete error:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+}
+

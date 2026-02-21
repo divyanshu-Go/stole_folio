@@ -1,3 +1,4 @@
+// app/api/containers/[container_id]/route.js
 import { NextResponse } from "next/server";
 import DbConnect from "@/lib/db/DbConnect";
 import { ObjectId } from "mongodb";
@@ -17,23 +18,6 @@ export async function GET(request, { params }) {
       );
     }
 
-    // // Auth check
-    // const authCookie = request.cookies.get("auth_token");
-    // if (!authCookie) {
-    //   return NextResponse.json(
-    //     { success: false, error: "Not Authenticated" },
-    //     { status: 401 }
-    //   );
-    // }
-
-    // const token = authCookie.value;
-    // const payload = await verifyToken(token);
-    // if (!payload) {
-    //   return NextResponse.json(
-    //     { success: false, error: "Invalid token" },
-    //     { status: 401 }
-    //   );
-    // }
 
     await DbConnect();
 

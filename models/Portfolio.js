@@ -1,13 +1,12 @@
 // models/Portfolio.js
 import mongoose from "mongoose";
-import Container from "./Container";
 
 const PortfolioSchema = new mongoose.Schema(
   {
     author: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true, // Ensure author is always present
+      required: true,
     },
     title: {
       type: String,
@@ -21,7 +20,10 @@ const PortfolioSchema = new mongoose.Schema(
       unique: true,
       trim: true,
       lowercase: true,
-      match: [/^[a-z0-9-]+$/, "URL can only contain lowercase letters, numbers, and hyphens"],
+      match: [
+        /^[a-z0-9-]+$/,
+        "URL can only contain lowercase letters, numbers, and hyphens",
+      ],
       maxlength: [50, "URL cannot exceed 50 characters"],
     },
     containerId: {
@@ -39,14 +41,18 @@ const PortfolioSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    // Admin approval — only approved portfolios show on /portfolios gallery
+    isApproved: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-// Index for faster queries on public portfolios sorted by creation date
-PortfolioSchema.index({ isPublic: 1, createdAt: -1 });
+PortfolioSchema.index({ isPublic: 1, isApproved: 1, createdAt: -1 });
 
 const Portfolio =
   mongoose.models.Portfolio || mongoose.model("Portfolio", PortfolioSchema);
